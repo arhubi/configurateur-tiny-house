@@ -35,19 +35,19 @@ const StepWrapper = styled.div<Partial<StepProps>>`
 `
 
 
-const SubCategories = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  
-  div {
-    box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.08) 0 0 0 1px;
-    background-color: white;
-    padding: 0.4rem;
-    border-radius: 0.2rem;
-    font-size: 1.5rem;
-  }
-  `;
+// const SubCategories = styled.div`
+//   display: flex;
+//   flex-wrap: wrap;
+//   gap: 1rem;
+//
+//   div {
+//     box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.08) 0 0 0 1px;
+//     background-color: white;
+//     padding: 0.4rem;
+//     border-radius: 0.2rem;
+//     font-size: 1.5rem;
+//   }
+//   `;
 
 export type StepProps = {
     title: string;
