@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap');
+
+:root {
+  --header-height: 8rem;
+}
+
+h1, h2 {
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  font-family: 'Raleway', sans-serif;
+  background-color: #F8F9F9;
+}
+
+.app-body {
+  margin-top: 2rem;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  height: 100%;
+  width: 90vw;
+}
+
+.configurator {
+  width: 100%;
+}
+
+.configurator-intro {
+  padding: 2rem;
+}
+
+.configurator-intro h2 {
+  margin: 0;
+}
+
+.app-header {
+  background-color: #fbfcff;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  position: sticky;
+  top: 0;
+  box-shadow: 0 2px 10px 4px #e2dede;
+  height: var(--header-height);
+  width: 100vw;
+  z-index: 10;
+}
+
+.app-logo-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+
+.app-logo {
+  height: 6rem;
+}
+
+.app-title {
+  display: flex;
+  flex-direction: column;
+  margin-left: 0.3rem;
+}
+
+.app-title h1 {
+    margin-bottom: 0;
+}
+
+p {
+  margin: 0;
+}
