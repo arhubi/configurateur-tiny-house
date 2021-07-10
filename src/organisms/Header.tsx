@@ -6,22 +6,31 @@ import { device } from "../theme/device";
 const HeaderWrapper = styled.div`
     display: grid;
     width: 100%;
-    grid-template-columns: 1fr 3fr 1fr;
-    height: var(--header-height);
+    grid-template-columns: 3fr 1fr;
+    height: var(--header-height-mobile);
+  
+    @media screen and ${device.laptop} {
+      grid-template-columns: 1fr 3fr 1fr;
+      height: var(--header-height);
 
-    > :nth-child(1) { 
-      grid-column-start: 2; 
+      > :nth-child(1) {
+        grid-column-start: 2;
+      }
     }
 `;
 
 const LogoIntroWrapper = styled.header`
   background-color: #F8F9F9;
   display: flex;
-    position: relative;
+  position: relative;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   z-index: 10;
+  
+  @media screen and ${device.laptop} {
+    align-items: center;
+  }
 `;
 
 const LogoWrapper = styled.div`
@@ -48,10 +57,20 @@ const LogoWrapper = styled.div`
 
 const LinkWrapper = styled.div`
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    
+    p {
+      margin: 0;
+    }
   
-    > p {
-      margin-right: 0.4rem;
+    @media screen and ${device.laptop} {
+      flex-direction: row;
+      align-items: center;
+      p {
+        margin-right: 0.4rem;
+      }
     }
 `;
 

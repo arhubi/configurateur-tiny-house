@@ -1,13 +1,13 @@
-import React, {useEffect, useRef, useState} from 'react';
-import styled from "styled-components";
+import React, {useEffect, useRef, useState} from 'react'
+import styled from "styled-components"
 
-import { ItemProps } from "../atoms/Item";
-import { getDbItems } from "../utils/notion";
-import { useVisibility } from "../hooks/useVisibility";
-import { device } from "../theme/device";
-import '../app.css';
+import { ItemProps } from "../atoms/Item"
+import { getDbItems } from "../utils/notion"
+import { useVisibility } from "../hooks/useVisibility"
+import { device } from "../theme/device"
+import '../app.css'
 
-import { ItemsGrid } from "./ItemsGrid";
+import { ItemsGrid } from "./ItemsGrid"
 
 const StepWrapper = styled.div<Partial<StepProps>>`
   display: flex;
@@ -36,11 +36,16 @@ const StepWrapper = styled.div<Partial<StepProps>>`
   }
   
   .step-description {
-    text-align: left;
+    text-align: center;
     width: 100%;
+    
+    p {
+      margin: 0;
+    }
     
     @media screen and ${device.laptop} {
       width: 30%;
+      text-align: left;
     }
     
     > h2 {
@@ -64,6 +69,7 @@ export type StepProps = {
     isEnabled?: boolean;
     required?: boolean;
     multiple?: boolean;
+    showTitle?: boolean;
     onStepDone?: () => void;
     onVisibilityChange?: (status: boolean) => void;
 };
@@ -76,13 +82,14 @@ export const Step: React.FC<StepProps> = (
         required = true,
         onStepDone,
         onVisibilityChange,
-        multiple = false
+        multiple = false,
+        showTitle= true
     }) => {
 
     const [items, setItems] = useState<ItemProps[]>([])
     const [validated, setIsValidated] = useState(false)
     const reference = useRef()
-    const isVisible = useVisibility(reference, '122px 0px 0px 0px', )
+    const isVisible = useVisibility(reference, '0px 0px 0px 0px')
 
     const handleClick = (e: React.MouseEvent) => !isEnabled && e.stopPropagation()
 
@@ -113,7 +120,7 @@ export const Step: React.FC<StepProps> = (
     return (
         <StepWrapper isEnabled={isEnabled} onClickCapture={e => handleClick(e)} ref={reference as any}>
             <div className="step-description">
-                <h2>{ title } { required && '*'}</h2>
+              {showTitle && <h2>{ title } { required && '*'}</h2>}
                 {multiple
                     ? <p>Plusieurs choix possibles</p>
                     : <p>Un choix possible</p>}

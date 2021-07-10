@@ -12,11 +12,13 @@ const ItemsGridWrapper = styled.div`
   gap: 2rem;
   overflow-x: scroll;
   grid-auto-flow: column;
+    align-items: center;
 
   @media screen and ${device.laptop} {  
     grid-auto-rows: minmax(150px, 1fr);
     grid-auto-flow: initial;
- }
+    gap: 2rem;
+  }
 `
 
 const Button = styled.button`

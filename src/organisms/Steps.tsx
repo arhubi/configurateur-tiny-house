@@ -1,8 +1,9 @@
-import { Step, StepProps } from "../molecules/Step";
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store";
+import { Step, StepProps } from "../molecules/Step"
+import React, { useEffect, useState } from "react"
+import styled from "styled-components"
+import { useDispatch, useSelector } from "react-redux"
+import { RootState } from "../store"
+import { useMediaQuery } from "../hooks/useMediaQuery"
 
 const StepWrapper = styled.div<Partial<StepProps>>`
   display: flex;
@@ -29,6 +30,8 @@ export const Steps: React.FC<StepsProps> = ({ steps, isLoading }) => {
     const [enabledSteps, setEnabledSteps] = useState([steps?.[0]?.title] || [])
     const [visibleSteps, setVisibleSteps] = useState<number[]>([])
     const [activeStep, setActiveStep] = useState<StepProps | undefined>(steps[0])
+
+    const isLaptop = useMediaQuery('laptop')
 
     const isCurrentStepIndex = (useSelector((state: RootState) => state.steps) as any)
       .findIndex((step: any) => step.isActive)
@@ -59,14 +62,13 @@ export const Steps: React.FC<StepsProps> = ({ steps, isLoading }) => {
         setVisibleSteps(visibleSteps => status
           ? [...visibleSteps, index]
           : visibleSteps.filter(stepIndex => stepIndex !== index))
-        console.log('steps visibles', visibleSteps)
         if (visibleSteps.length > 1) {
             const firstStepVisible = steps[Math.min(...visibleSteps)]
-            // TODO : fix to set :
-            // - the first visible item (on scroll)
-            // - item must be active
             if (firstStepVisible.isEnabled) {
-                dispatch({type: 'steps/set-active', payload: steps[Math.min(...visibleSteps)]})
+                // TODO : fix to set :
+                // - the first visible item (on scroll)
+                // - item must be active
+                //dispatch({type: 'steps/set-active', payload: steps[Math.min(...visibleSteps)]})
             }
         }
     }
@@ -81,6 +83,7 @@ export const Steps: React.FC<StepsProps> = ({ steps, isLoading }) => {
                     handleVisibilityChange(index, newVisibilityStatus)}
                   isEnabled={enabledSteps.includes(step.title)}
                   isCurrent={index === isCurrentStepIndex}
+                  showTitle={isLaptop}
             />)
         }
         {isLoading && <div>Chargement en cours...</div>}
