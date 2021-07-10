@@ -14,20 +14,23 @@ type ArrowProps = {
 
 const ConfiguratorBannerWrapper = styled.div<ArrowProps>`
   display: flex;
-  position: relative;
+  position: sticky;
+  top: 0;
   align-items: center;
-  justify-content: center;
-  gap: 3rem;
+  justify-content: space-between;
+  gap: 1rem;
   padding: 0.5rem;
   overflow: scroll;
   background-color: rgba(255, 165, 0, 0.6);
-    backdrop-filter: blur(10px);
-    color: white;
+  backdrop-filter: blur(10px);
+  color: white;
   border-radius: 0.4rem;
   z-index: 20;
-  height: 3rem;
+  height: var(--configurator-banner-height-mobile);
+  flex-shrink: 0;
+  width: 80vw;
   
-  h1 {
+  h2 {
     margin: 0;
   }
 
@@ -35,6 +38,7 @@ const ConfiguratorBannerWrapper = styled.div<ArrowProps>`
     width: 80vw;
     height: 3rem;
     justify-content: flex-start;
+    gap: 3rem;
   }
 `;
 
@@ -97,7 +101,7 @@ export const ConfiguratorBanner: React.FC = () => {
         hRotation
         visible={activeStepIndex > 0 && steps[activeStepIndex - 1].isEnabled}
         onClick={() => setStepActive(steps[activeStepIndex - 1])}/>
-      <h1>{steps[activeStepIndex].title}</h1>
+      {isLaptop ? <h1>{steps[activeStepIndex].title}</h1> : <h2>{steps[activeStepIndex].title}</h2>}
       <CustomArrow
         visible={activeStepIndex < steps.length - 1 && steps[activeStepIndex + 1].isEnabled}
         onClick={() => setStepActive(steps[activeStepIndex + 1])}/>

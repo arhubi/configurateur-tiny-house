@@ -1,5 +1,4 @@
 import React from 'react'
-import './app.css'
 import { Header } from "./organisms/Header"
 import styled from "styled-components"
 import { device } from "./theme/device"
@@ -18,7 +17,7 @@ const AppWrapper = styled.div`
   }
   
   h1 {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     
     @media screen and ${device.laptop} {
       font-size: 2rem;

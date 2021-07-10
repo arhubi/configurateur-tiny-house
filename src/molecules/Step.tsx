@@ -12,7 +12,7 @@ import { ItemsGrid } from "./ItemsGrid"
 const StepWrapper = styled.div<Partial<StepProps>>`
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - var(--header-height));
+  min-height: calc(100vh - var(--header-height)) - 3rem;
   gap: 3rem;
   opacity: ${props => props.isEnabled ? 1 : 0.2};
   border-radius: 0.4rem;
