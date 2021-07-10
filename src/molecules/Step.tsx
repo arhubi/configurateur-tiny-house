@@ -99,6 +99,7 @@ export const Step: React.FC<StepProps> = (
 
     useEffect(() => {
       onVisibilityChange?.(isVisible)
+      // eslint-disable-next-line
     }, [isVisible])
 
     useEffect(() => {

@@ -4,6 +4,8 @@ export function useVisibility(ref: any, rootMargin = "0px") {
   // State and setter for storing whether element is visible
   const [isIntersecting, setIntersecting] = useState(false);
   useEffect(() => {
+
+    const element = ref.current;
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIntersecting(entry.isIntersecting);
@@ -12,10 +14,12 @@ export function useVisibility(ref: any, rootMargin = "0px") {
         rootMargin
       }
     );
+
     if (ref.current as any) {
       observer.observe(ref.current);
     }
-    return () => { observer.unobserve(ref.current as Element) };
-  }, []); // Empty array ensures that effect is only run on mount and unmount
+    return () => { observer.unobserve(element) };
+    // eslint-disable-next-line
+  }, []);
   return isIntersecting;
 }

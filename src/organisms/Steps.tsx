@@ -37,6 +37,7 @@ export const Steps: React.FC<StepsProps> = ({ steps, isLoading }) => {
 
     useEffect(() => {
         !isLoading && setEnabledSteps(enabledSteps => [...enabledSteps, steps?.[0]?.title])
+        // eslint-disable-next-line
     }, [isLoading])
 
     useEffect(() => {
@@ -58,6 +59,7 @@ export const Steps: React.FC<StepsProps> = ({ steps, isLoading }) => {
         setVisibleSteps(visibleSteps => status
           ? [...visibleSteps, index]
           : visibleSteps.filter(stepIndex => stepIndex !== index))
+        console.log('steps visibles', visibleSteps)
         if (visibleSteps.length > 1) {
             const firstStepVisible = steps[Math.min(...visibleSteps)]
             // TODO : fix to set :
@@ -70,7 +72,6 @@ export const Steps: React.FC<StepsProps> = ({ steps, isLoading }) => {
     }
 
     return (<StepWrapper>
-        <p>Visible steps : {visibleSteps.join(', ')}</p>
         {!isLoading && steps
             .map((step, index) =>
             <Step {...step}

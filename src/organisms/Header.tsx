@@ -77,7 +77,7 @@ export const Header: React.FC = () => (
     </LogoIntroWrapper>
       <LinkWrapper>
         <p>proposé par</p>
-        <a href="https://www.guide-tinyhouse.com" target="_blank">Guide Tiny House</a>
+        <a href="https://www.guide-tinyhouse.com" target="_blank" rel="noreferrer">Guide Tiny House</a>
       </LinkWrapper>
   </HeaderWrapper>
 )
