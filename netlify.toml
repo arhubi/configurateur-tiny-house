@@ -1,0 +1,6 @@
+[[redirects]]
+  from = "/notion-api/*"
+  to = "https://api.notion.com/v1/:splat"
+  status = 200
+  force = true
+  headers = {X-From = "Netlify"}
