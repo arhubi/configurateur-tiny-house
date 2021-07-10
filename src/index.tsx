@@ -7,7 +7,6 @@ import reportWebVitals from './reportWebVitals';
 import store from './store'
 import axios from "axios";
 
-console.log(process.env)
 axios.defaults.baseURL = '/notion-api/';
 axios.defaults.headers.common['Authorization'] = `Bearer ${process.env.REACT_APP_NOTION_SECRET}`;
 axios.defaults.headers.common['Notion-Version'] = process.env.REACT_APP_NOTION_VERSION;
