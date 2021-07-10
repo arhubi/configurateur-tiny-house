@@ -16,7 +16,7 @@ export function useMediaQuery(screenSize: ScreenSize) {
     };
     media.addEventListener('change', listener)
     return () => media.removeEventListener('change', listener)
-  }, [matches, device])
+  }, [matches, screenSize])
 
   return matches;
 }
