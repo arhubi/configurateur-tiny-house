@@ -14,10 +14,12 @@ const ItemCard = styled.div<Partial<ItemProps>>`
   height: 15rem;
   width: 10rem;
   border-radius: 0.4rem;
+  margin: 0.2rem;
   background-color: white;
   box-shadow: ${({isSelected}) => isSelected 
-          ? '0 0 0px 3px orange'
-: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px' };
+      ? '0 0 0px 0.2rem orange'
+      : '0 0 0px 0px orange' };
+  transition: all 100ms ease-in;
   
   :hover {
     cursor: pointer;

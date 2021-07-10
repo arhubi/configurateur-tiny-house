@@ -1,67 +1,62 @@
-import React from 'react';
-import { Steps } from './organisms/Steps';
-import { Summary } from './organisms/Summary';
-import './app.css';
-import logo from './assets/logo-transparent.png';
-import { useSelector } from "react-redux";
-import { RootState } from './store'
-import axios from "axios";
+import React from 'react'
+import './app.css'
+import { Header } from "./organisms/Header"
+import styled from "styled-components"
+import { device } from "./theme/device"
+import { AppConfigurator } from "./organisms/AppConfigurator"
+
+const AppWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Raleway', sans-serif;
+  background-color: #F8F9F9;
+  max-width: 100vw;
+
+  h1, h2 {
+    text-transform: uppercase;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+    
+    @media screen and ${device.laptop} {
+      font-size: 2rem;
+    }
+  }
+  
+  a {
+    color: orange;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  p {
+    font-size: 1rem;
+  }
+`;
+
+const AppBody = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  height: var(--body-height);
+  width: 100%;
+`;
+
 
 const App = () => {
-    const SECTION_ID = '873f2a66-4551-4cf8-8ca1-5b04e71d46d2'
-    const SECRET = 'secret_y6Yp9rOrhtaeUYuxoN1AS5vUKi1W08pmfEus3O5i4PG'
-
-    axios.get(`https://api.notion.com/v1/block/${SECTION_ID}/children`, {
-        withCredentials: true,
-        headers: {
-            'Authorization': `Bearer ${SECRET}`,
-            'Notion-Version': '2021-05-13',
-        }
-    }).then(res => console.log(res)).catch(err => console.log(err))
-
-
-    /* const headers = new Headers()
-    headers.append('Notion-Version', '2021-05-13')
-    headers.append('Authorization', `Bearer ${SECRET}`)
-    headers.append('Content-Type', 'application/x-www-form-urlencoded')
-    headers.append('Content-Type', 'multipart/form-data')
-    headers.append('Content-Type', 'text/plain')
-
-    const options: RequestInit = {
-        method: 'GET',
-        mode: 'cors',
-        headers,
-    };
-   fetch(`https://api.notion.com/v1/block/${SECTION_ID}/children`, options)
-       .then(res => res.json().then(data => console.log("data", data)).catch(e => console.warn(e)))
-       .catch(err => console.warn(err)) */
-
-    // TODO : get pages titles from notion
-  const steps = useSelector((state: RootState) => state.items.steps)
-
     return (
-        <div className="app">
-          <header className="app-header">
-              <div className="app-logo-wrapper">
-            <img src={logo} className="app-logo" alt="logo" />
-            <div className="app-title">
-                  <h1>Le Configurateur</h1>
-            <p>
-              Configurez votre tiny et estimez son prix en quelques clics !
-            </p>
-                  </div>
-            </div>
-          </header>
-        <div className="app-body">
-            <div className="configurator">
-                <div className="configurator-intro">
-                    <h2>Choisissez étape par étape les composants de votre tiny house</h2>
-                </div>
-                <Steps steps={steps} />
-            </div>
-            <Summary />
-        </div>
-        </div>
+        <AppWrapper>
+            <Header />
+            <AppBody>
+                <AppConfigurator />
+            </AppBody>
+        </AppWrapper>
     );
 }
 

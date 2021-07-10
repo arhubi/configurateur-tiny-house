@@ -1,19 +1,33 @@
-import React from 'react';
-import '../app.css';
+import React, {useEffect, useRef, useState} from 'react';
 import styled from "styled-components";
+
+import { ItemProps } from "../atoms/Item";
+import { getDbItems } from "../utils/notion";
+import { useVisibility } from "../hooks/useVisibility";
+import { device } from "../theme/device";
+import '../app.css';
+
 import { ItemsGrid } from "./ItemsGrid";
 
 const StepWrapper = styled.div<Partial<StepProps>>`
   display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - var(--header-height));
   gap: 3rem;
-  opacity: ${props => props.isActive ? 1 : 0.2};
-  cursor: ${props => !props.isActive && 'not-allowed'};
+  opacity: ${props => props.isEnabled ? 1 : 0.2};
+  border-radius: 0.4rem;
+  padding: 1rem;
+  cursor: ${props => !props.isEnabled && 'not-allowed'};
+  
+  @media screen and ${device.laptop} {
+    flex-direction: row;
+    min-height: auto;
+}
 
   * {
-    cursor: ${props => !props.isActive && 'not-allowed'};
+    cursor: ${props => !props.isEnabled && 'not-allowed'};
   }
   
-  padding: 0.3rem;
   scroll-snap-align: start;
   animation: fade-in 1000ms ease;
   
@@ -23,7 +37,15 @@ const StepWrapper = styled.div<Partial<StepProps>>`
   
   .step-description {
     text-align: left;
-    width: 30%;
+    width: 100%;
+    
+    @media screen and ${device.laptop} {
+      width: 30%;
+    }
+    
+    > h2 {
+      margin: 0;
+    }
   }
   
   @keyframes fade-in {
@@ -31,61 +53,79 @@ const StepWrapper = styled.div<Partial<StepProps>>`
       opacity: 0;
     }
   }
-
 `
-
-
-// const SubCategories = styled.div`
-//   display: flex;
-//   flex-wrap: wrap;
-//   gap: 1rem;
-//
-//   div {
-//     box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.08) 0 0 0 1px;
-//     background-color: white;
-//     padding: 0.4rem;
-//     border-radius: 0.2rem;
-//     font-size: 1.5rem;
-//   }
-//   `;
 
 export type StepProps = {
     title: string;
+    notionDbId: string;
+    itemsCount: number;
     isActive?: boolean;
+    isCurrent?: boolean;
+    isEnabled?: boolean;
     required?: boolean;
     multiple?: boolean;
-    onStepDone?: (index: number) => void;
+    onStepDone?: () => void;
+    onVisibilityChange?: (status: boolean) => void;
 };
 export const Step: React.FC<StepProps> = (
     {
         title,
+        notionDbId,
+        isEnabled = false,
         isActive = false,
-        required = false,
+        required = true,
         onStepDone,
+        onVisibilityChange,
         multiple = false
     }) => {
-    const items = [
-        { name: 'Remorque', category: title, price: 200, image: 'https://maison-monde.com/wp-content/uploads/2019/08/remorque-plateau-tiny-house.jpg'},
-        { name: 'Remorque 2', category: title, price: 200, image: 'https://maison-monde.com/wp-content/uploads/2019/08/remorque-tiny-house-plateau.jpg'},
-        { name: 'Remorque 3', category: title, price: 200, image: 'https://maison-monde.com/wp-content/uploads/2019/08/remorque-plateau-tiny-house.jpg'},
-        { name: 'Remorque 4', category: title, price: 200, image: 'https://maison-monde.com/wp-content/uploads/2019/08/remorque-plateau-tiny-house.jpg'},
-        { name: 'Remorque 5', category: title, price: 200, image: 'https://maison-monde.com/wp-content/uploads/2019/08/remorque-plateau-tiny-house.jpg'},
-    ]
 
-    const handleClick = (e: React.MouseEvent) => !isActive && e.stopPropagation()
+    const [items, setItems] = useState<ItemProps[]>([])
+    const [validated, setIsValidated] = useState(false)
+    const reference = useRef()
+    const isVisible = useVisibility(reference, '122px 0px 0px 0px', )
 
-    const handleSelectedItem = (index: number) => !multiple && onStepDone?.(index)
+    const handleClick = (e: React.MouseEvent) => !isEnabled && e.stopPropagation()
 
+    const handleValidation = () => {
+        if (isEnabled) {
+          onStepDone?.()
+          setIsValidated(true)
+        }
+    }
+
+    useEffect(() => {
+        isActive && (reference?.current as any).scrollIntoView()
+    }, [isActive, reference])
+
+    useEffect(() => {
+      onVisibilityChange?.(isVisible)
+    }, [isVisible])
+
+    useEffect(() => {
+        (async () => {
+            const items: ItemProps[] = await getDbItems(title, notionDbId)
+            setItems(items)
+        })()
+    // eslint-disable-next-line
+    }, [])
 
     return (
-        <StepWrapper isActive={isActive} onClickCapture={e => handleClick(e)}>
+        <StepWrapper isEnabled={isEnabled} onClickCapture={e => handleClick(e)} ref={reference as any}>
             <div className="step-description">
+                <h2>{ title } { required && '*'}</h2>
                 {multiple
                     ? <p>Plusieurs choix possibles</p>
                     : <p>Un choix possible</p>}
-                <h1>{ title } { required && '*'}</h1>
             </div>
-            <ItemsGrid items={items} category={title} multiple={multiple} onItemSelected={handleSelectedItem} required={required} />
+            {items.length > 0 &&
+              <ItemsGrid
+                items={items}
+                category={title}
+                multiple={multiple}
+                onValidation={handleValidation}
+                required={required}
+                isValidated={validated}/>
+            }
         </StepWrapper>
     );
 }

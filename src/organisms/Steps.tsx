@@ -1,43 +1,88 @@
 import { Step, StepProps } from "../molecules/Step";
-import React, {useRef, useState} from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store";
 
 const StepWrapper = styled.div<Partial<StepProps>>`
   display: flex;
   flex-direction: column;
   gap: 3rem;
+  padding-bottom: 2rem;
   scroll-snap-type: y mandatory;
   overflow: scroll;
-  height: 45rem;
+  height: 40rem;
   scroll-behavior: smooth;
+    
+  > div:last-child {
+      margin-bottom: 50%;
+  }
 `;
 
 type StepsProps = {
     steps: StepProps[];
+    isLoading: boolean;
     ref?: React.Ref<HTMLDivElement>;
 }
 
-export const Steps: React.FC<StepsProps> = ({ steps }) => {
-    const [activeSteps, setActiveSteps] = useState([0]);
-    const reference = useRef<HTMLDivElement>(null);
+export const Steps: React.FC<StepsProps> = ({ steps, isLoading }) => {
+    const [enabledSteps, setEnabledSteps] = useState([steps?.[0]?.title] || [])
+    const [visibleSteps, setVisibleSteps] = useState<number[]>([])
+    const [activeStep, setActiveStep] = useState<StepProps | undefined>(steps[0])
+
+    const isCurrentStepIndex = (useSelector((state: RootState) => state.steps) as any)
+      .findIndex((step: any) => step.isActive)
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        !isLoading && setEnabledSteps(enabledSteps => [...enabledSteps, steps?.[0]?.title])
+    }, [isLoading])
+
+    useEffect(() => {
+        dispatch({type: 'steps/set-active', payload: activeStep})
+    }, [activeStep, dispatch])
+
+    useEffect(() => {
+        dispatch({type: 'steps/set-enabled-all', payload: enabledSteps})
+    }, [enabledSteps, dispatch])
 
     const handleStepDone = (index: number) => {
-        if (reference.current) {
-            reference.current.scrollTop += 300;
-        }
         if (index + 1 < steps.length) {
-            setActiveSteps((activeSteps) => [...activeSteps, index + 1]);
+            setEnabledSteps((enabledSteps) => [...enabledSteps, steps[index + 1].title]);
+            setActiveStep(steps[index + 1])
         }
-    };
+    }
 
-    return (<StepWrapper ref={reference}>
-        {steps.map((step, index) =>
+    const handleVisibilityChange = (index: number, status: boolean) => {
+        setVisibleSteps(visibleSteps => status
+          ? [...visibleSteps, index]
+          : visibleSteps.filter(stepIndex => stepIndex !== index))
+        if (visibleSteps.length > 1) {
+            const firstStepVisible = steps[Math.min(...visibleSteps)]
+            // TODO : fix to set :
+            // - the first visible item (on scroll)
+            // - item must be active
+            if (firstStepVisible.isEnabled) {
+                dispatch({type: 'steps/set-active', payload: steps[Math.min(...visibleSteps)]})
+            }
+        }
+    }
+
+    return (<StepWrapper>
+        <p>Visible steps : {visibleSteps.join(', ')}</p>
+        {!isLoading && steps
+            .map((step, index) =>
             <Step {...step}
                   key={index}
                   onStepDone={() => handleStepDone(index)}
-                  isActive={activeSteps.includes(index)}
+                  onVisibilityChange={(newVisibilityStatus) =>
+                    handleVisibilityChange(index, newVisibilityStatus)}
+                  isEnabled={enabledSteps.includes(step.title)}
+                  isCurrent={index === isCurrentStepIndex}
             />)
         }
+        {isLoading && <div>Chargement en cours...</div>}
     </StepWrapper>)
 };
 

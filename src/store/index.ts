@@ -1,6 +1,6 @@
-import { Action, configureStore } from "@reduxjs/toolkit";
-import { ItemProps } from "../atoms/Item";
-import {StepProps} from "../molecules/Step";
+import {Action, combineReducers, createStore} from "@reduxjs/toolkit"
+import { ItemProps } from "../atoms/Item"
+import { StepProps } from "../molecules/Step"
 
 type State = {
     items: ItemProps[];
@@ -9,45 +9,67 @@ type State = {
 
 const initialState: State = {
     items: [],
-    steps: [
-        { title: "Remorque", required: true },
-        { title: "Finition", required: true  },
-        { title: "Chauffage" },
-        { title: "Isolants" },
-        { title: "Mobilier", multiple: true }
-    ]
+    steps: []
 };
 
 interface ItemsAction extends Action {
     payload: ItemProps
 }
 
-export function itemsReducer(state = initialState, action: ItemsAction) {
-    if (!action.payload) return state
+export function itemsReducer(itemsState = initialState.items, action: ItemsAction) {
+    if (!action.payload) return itemsState
 
     switch (action.type) {
         case 'items/add':
-            return {
-                ...state,
-                items: [...state.items, action.payload]
-            }
+            return [...itemsState, action.payload]
         case 'items/remove':
-            const itemIndex = state.items.findIndex(item =>
+            const itemIndex = itemsState.findIndex(item =>
                 item.name === action.payload.name && item.category === action.payload.category)
-            return itemIndex < 0 ? state : {
-                ...state,
-                items: [...state.items.slice(0, itemIndex), ...state.items.slice(itemIndex + 1, state.items.length)]
-            }
+            return itemIndex < 0
+                ? itemsState
+                : [...itemsState.slice(0, itemIndex), ...itemsState.slice(itemIndex + 1, itemsState.length)]
         default:
-            return state
+            return itemsState
     }
 }
 
-const store = configureStore<{ items: State; }, ItemsAction>({
-    reducer: {
-        items: itemsReducer,
+interface StepAction extends Action {
+    payload: StepProps
+}
+
+export function stepsReducer(stepsState = initialState.steps, action: StepAction) {
+    if (!action.payload) return stepsState
+
+    switch (action.type) {
+        case 'steps/set-all':
+            return action.payload
+        case 'steps/set-enabled-all':
+            const payload = action.payload as any
+            return stepsState.map(step => {
+                const payloadIndex = payload.indexOf(step.title)
+                return payloadIndex > - 1
+                    ? { ...step, isEnabled: true}
+                    : { ...step, isEnabled: false}
+            })
+        case 'steps/set-active':
+            const payloadType = typeof action.payload
+            const stepTitle = payloadType === 'string' ? action.payload : action.payload.title
+            return stepsState.map(step => step.title === stepTitle
+                ? { ...step, isActive: true, isCurrent: true}
+                : { ...step, isActive: false, isCurrent: false}
+            )
+        default:
+            return stepsState
     }
-})
+}
+
+const rootReducer = combineReducers(({
+        items: itemsReducer,
+        steps: stepsReducer
+    }
+))
+
+const store = createStore(rootReducer)
 
 export default store;
 export type RootState = ReturnType<typeof store.getState>
