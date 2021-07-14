@@ -1,8 +1,7 @@
 import { Step, StepProps } from "../molecules/Step"
 import React, { useEffect, useState } from "react"
 import styled from "styled-components"
-import { useDispatch, useSelector } from "react-redux"
-import { RootState } from "../store"
+import { useDispatch } from "react-redux"
 import { useMediaQuery } from "../hooks/useMediaQuery"
 import { LoadingScreen } from "../molecules/LoadingScreen"
 
