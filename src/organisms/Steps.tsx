@@ -34,9 +34,6 @@ export const Steps: React.FC<StepsProps> = ({ steps, isLoading }) => {
 
     const isLaptop = useMediaQuery('laptop')
 
-    const isCurrentStepIndex = (useSelector((state: RootState) => state.steps) as any)
-      .findIndex((step: any) => step.isActive)
-
     const dispatch = useDispatch()
 
     useEffect(() => {
