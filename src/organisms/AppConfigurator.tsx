@@ -1,6 +1,6 @@
 import { Steps } from "./Steps";
 import { Summary } from "./Summary";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 import axios from "axios";
@@ -55,6 +55,7 @@ export const AppConfigurator: React.FC = () => {
   const SETTINGS_ID = '3c3936ea062842bdada70c592e90b46b'
   const dispatch = useDispatch()
 
+  const [isLoading, setIsLoading] = useState(true)
   const steps: any = useSelector((state: RootState) => state.steps)
 
   useEffect(() => {
@@ -70,6 +71,7 @@ export const AppConfigurator: React.FC = () => {
           const { data } = await axios.get(`/databases/${id}`)
           const title = data.title[0].plain_text
           const relatedSettings = settings.find((setting: any) => setting.title === title)
+          console.log(relatedSettings)
 
           const { data: postsData } = await axios.post(`/databases/${id}/query`)
           const itemsCount = getValidItems(postsData.results)
@@ -79,13 +81,14 @@ export const AppConfigurator: React.FC = () => {
             itemsCount,
             notionDbId: id,
             isActive: index === 0,
-            isCurrent: index === 0,
             isEnabled: index === 0,
             ...relatedSettings
           }
         })
       )
+      console.log('steps', steps)
       dispatch({ type: 'steps/set-all', payload: steps.filter((step: StepProps) => step.itemsCount > 0) })
+      setIsLoading(false)
     })()
     // eslint-disable-next-line
   }, [])
@@ -98,7 +101,7 @@ export const AppConfigurator: React.FC = () => {
           <div className="configurator-intro">
             <h2>Choisissez les composants de votre tiny house</h2>
           </div>
-          <Steps steps={steps} isLoading={!steps.length}/>
+          <Steps steps={steps} isLoading={isLoading}/>
         </div>
         <Summary/>
       </div>

@@ -43,8 +43,12 @@ const AppBody = styled.div`
   align-items: center;
   justify-content: space-between;
   text-align: center;
-  height: var(--body-height);
+  height: var(--body-height-mobile);
   width: 100%;
+  
+  @media screen and ${device.laptop} {
+    height: var(--body-height);
+  }
 `;
 
 

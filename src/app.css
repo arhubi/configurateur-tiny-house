@@ -6,6 +6,12 @@
   --configurator-banner-height: 3rem;
   --configurator-banner-height-mobile: 2rem;
   --body-height: calc(100vh - var(--header-height));
+  --body-height-mobile: calc(100vh - var(--header-height-mobile));
   --primary: #333333;
   color: #333333;
+
+}
+
+body {
+  margin: 0;
 }

@@ -8,10 +8,12 @@ const HeaderWrapper = styled.div`
     width: 100%;
     grid-template-columns: 3fr 1fr;
     height: var(--header-height-mobile);
+    box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.08) 0 0 0 1px;
   
     @media screen and ${device.laptop} {
       grid-template-columns: 1fr 3fr 1fr;
       height: var(--header-height);
+      box-shadow: none;
 
       > :nth-child(1) {
         grid-column-start: 2;
@@ -60,6 +62,7 @@ const LinkWrapper = styled.div`
     align-items: flex-start;
     justify-content: center;
     flex-direction: column;
+    font-size: 0.6rem;
     
     p {
       margin: 0;
@@ -68,6 +71,7 @@ const LinkWrapper = styled.div`
     @media screen and ${device.laptop} {
       flex-direction: row;
       align-items: center;
+      font-size: 1rem;
       p {
         margin-right: 0.4rem;
       }
@@ -77,7 +81,7 @@ const LinkWrapper = styled.div`
 const AppIntro = styled.p`
   display: none;
   
-  @media screen and ${device.tablet} {
+  @media screen and ${device.laptop} {
     display: block;
     margin-top: 0;
   }

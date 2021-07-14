@@ -1,11 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
 import App from './App';
 import './app.css'
-import { Provider } from 'react-redux';
-import reportWebVitals from './reportWebVitals';
+import { Provider } from 'react-redux'
+import reportWebVitals from './reportWebVitals'
 import store from './store'
-import axios from "axios";
+import axios from "axios"
 
 axios.defaults.baseURL = '/notion-api/';
 axios.defaults.headers.common['Authorization'] = `Bearer ${process.env.REACT_APP_NOTION_SECRET}`;

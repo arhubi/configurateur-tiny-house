@@ -54,10 +54,7 @@ export function stepsReducer(stepsState = initialState.steps, action: StepAction
         case 'steps/set-active':
             const payloadType = typeof action.payload
             const stepTitle = payloadType === 'string' ? action.payload : action.payload.title
-            return stepsState.map(step => step.title === stepTitle
-                ? { ...step, isActive: true, isCurrent: true}
-                : { ...step, isActive: false, isCurrent: false}
-            )
+            return stepsState.map(step => ({ ...step, isActive: step.title === stepTitle }))
         default:
             return stepsState
     }

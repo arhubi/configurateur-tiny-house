@@ -4,6 +4,7 @@ import styled from "styled-components"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../store"
 import { useMediaQuery } from "../hooks/useMediaQuery"
+import { LoadingScreen } from "../molecules/LoadingScreen"
 
 const StepWrapper = styled.div<Partial<StepProps>>`
   display: flex;
@@ -82,11 +83,10 @@ export const Steps: React.FC<StepsProps> = ({ steps, isLoading }) => {
                   onVisibilityChange={(newVisibilityStatus) =>
                     handleVisibilityChange(index, newVisibilityStatus)}
                   isEnabled={enabledSteps.includes(step.title)}
-                  isCurrent={index === isCurrentStepIndex}
                   showTitle={isLaptop}
             />)
         }
-        {isLoading && <div>Chargement en cours...</div>}
+        {isLoading && <LoadingScreen />}
     </StepWrapper>)
 };
 

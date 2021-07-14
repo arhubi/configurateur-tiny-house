@@ -14,14 +14,14 @@ type ArrowProps = {
 
 const ConfiguratorBannerWrapper = styled.div<ArrowProps>`
   display: flex;
-  position: sticky;
-  top: 0;
+  position: fixed;
+  bottom: 6rem;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
   padding: 0.5rem;
   overflow: scroll;
-  background-color: rgba(255, 165, 0, 0.6);
+  background-color: rgba(255, 165, 0, 0.8);
   backdrop-filter: blur(10px);
   color: white;
   border-radius: 0.4rem;
@@ -35,6 +35,9 @@ const ConfiguratorBannerWrapper = styled.div<ArrowProps>`
   }
 
   @media screen and ${device.laptop} {
+    position: sticky;
+    top: 0;
+    bottom: 0;
     width: 80vw;
     height: 3rem;
     justify-content: flex-start;
@@ -74,11 +77,22 @@ const BannerStep = styled.div<{ isActive: boolean, isEnabled: boolean}>`
   `}
 `
 
+const StepTitle = styled.div`
+  overflow: hidden;
+  white-space: nowrap;
+
+  h1, h2 {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+`;
+
 export const ConfiguratorBanner: React.FC = () => {
 
     const steps: any = useSelector((state: RootState) => state.steps)
     const activeStepIndex: any = (useSelector((state: RootState) => state.steps) as any)
-      .findIndex((step: any) => step.isCurrent)
+      .findIndex((step: any) => step.isActive)
 
     const dispatch = useDispatch()
 
@@ -101,7 +115,11 @@ export const ConfiguratorBanner: React.FC = () => {
         hRotation
         visible={activeStepIndex > 0 && steps[activeStepIndex - 1].isEnabled}
         onClick={() => setStepActive(steps[activeStepIndex - 1])}/>
-      {isLaptop ? <h1>{steps[activeStepIndex].title}</h1> : <h2>{steps[activeStepIndex].title}</h2>}
+      <StepTitle>{isLaptop
+        ? <h1>{steps[activeStepIndex].title}</h1>
+        : <h2>{steps[activeStepIndex].title}</h2>}
+      </StepTitle>
+      {!isLaptop && steps[activeStepIndex].required && <h2>*</h2>}
       <CustomArrow
         visible={activeStepIndex < steps.length - 1 && steps[activeStepIndex + 1].isEnabled}
         onClick={() => setStepActive(steps[activeStepIndex + 1])}/>

@@ -8,11 +8,12 @@ import { device } from "../theme/device"
 import '../app.css'
 
 import { ItemsGrid } from "./ItemsGrid"
+import { Button } from "../atoms/Button";
 
 const StepWrapper = styled.div<Partial<StepProps>>`
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - var(--header-height)) - 3rem;
+  min-height: var(--body-height-mobile);
   gap: 3rem;
   opacity: ${props => props.isEnabled ? 1 : 0.2};
   border-radius: 0.4rem;
@@ -60,12 +61,22 @@ const StepWrapper = styled.div<Partial<StepProps>>`
   }
 `
 
+const ActionsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+  
+  @media screen and ${device.laptop} {
+    justify-content: flex-start;
+  }
+`
+
 export type StepProps = {
     title: string;
     notionDbId: string;
     itemsCount: number;
     isActive?: boolean;
-    isCurrent?: boolean;
     isEnabled?: boolean;
     required?: boolean;
     multiple?: boolean;
@@ -85,9 +96,9 @@ export const Step: React.FC<StepProps> = (
         multiple = false,
         showTitle= true
     }) => {
-
     const [items, setItems] = useState<ItemProps[]>([])
-    const [validated, setIsValidated] = useState(false)
+    const [isValidated, setIsValidated] = useState(false)
+    const [selectedItems, setSelectedItems] = useState<number[]>([])
     const reference = useRef()
     const isVisible = useVisibility(reference, '0px 0px 0px 0px')
 
@@ -98,6 +109,10 @@ export const Step: React.FC<StepProps> = (
           onStepDone?.()
           setIsValidated(true)
         }
+    }
+
+    const handleSelectedItems = (items: number[]) => {
+      setSelectedItems(items)
     }
 
     useEffect(() => {
@@ -120,10 +135,17 @@ export const Step: React.FC<StepProps> = (
     return (
         <StepWrapper isEnabled={isEnabled} onClickCapture={e => handleClick(e)} ref={reference as any}>
             <div className="step-description">
-              {showTitle && <h2>{ title } { required && '*'}</h2>}
+                {showTitle && <h2>{ title } { required && '*'}</h2>}
                 {multiple
                     ? <p>Plusieurs choix possibles</p>
                     : <p>Un choix possible</p>}
+              <ActionsWrapper>
+                {!required && !selectedItems.length &&
+                  <Button text="Passer" icon="skip" bgColor="var(--primary)" onClick={() => handleValidation()} />}
+                {multiple && selectedItems.length > 0 && !isValidated &&
+                  <Button text="Suivant" icon="arrow" bgColor="orange" onClick={() => handleValidation()} />
+                }
+              </ActionsWrapper>
             </div>
             {items.length > 0 &&
               <ItemsGrid
@@ -131,8 +153,9 @@ export const Step: React.FC<StepProps> = (
                 category={title}
                 multiple={multiple}
                 onValidation={handleValidation}
+                onSelected={handleSelectedItems}
                 required={required}
-                isValidated={validated}/>
+                isValidated={isValidated}/>
             }
         </StepWrapper>
     );
