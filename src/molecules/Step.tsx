@@ -10,6 +10,7 @@ import '../app.css'
 import { ItemsGrid } from "./ItemsGrid"
 import { Button } from "../atoms/Button";
 import { useMediaQuery } from "../hooks/useMediaQuery";
+import { Dots } from "./Dots";
 
 const StepWrapper = styled.div<Partial<StepProps>>`
   display: flex;
@@ -46,7 +47,7 @@ const StepWrapper = styled.div<Partial<StepProps>>`
     }
     
     @media screen and ${device.laptop} {
-      width: 30%;
+      width: 20%;
       text-align: left;
     }
     
@@ -100,6 +101,7 @@ export const Step: React.FC<StepProps> = (
     const [items, setItems] = useState<ItemProps[]>([])
     const [isValidated, setIsValidated] = useState(false)
     const [selectedItems, setSelectedItems] = useState<number[]>([])
+    const [visibleItems, setVisibleItems] = useState<number[]>([0])
     const reference = useRef()
     const isVisible = useVisibility(reference, '0px 0px 0px 0px')
 
@@ -127,6 +129,11 @@ export const Step: React.FC<StepProps> = (
       // eslint-disable-next-line
     }, [isVisible])
 
+  const handleVisibleItemsChange = (newVisibleItems: any) => {
+
+    setVisibleItems(newVisibleItems.length ? [newVisibleItems[newVisibleItems.length - 1]] : [0])
+  }
+
     useEffect(() => {
         (async () => {
             const items: ItemProps[] = await getDbItems(title, notionDbId)
@@ -135,13 +142,13 @@ export const Step: React.FC<StepProps> = (
     // eslint-disable-next-line
     }, [])
 
-    return (
+  const descriptionText = multiple ? 'Plusieurs choix possibles' : 'Un choix possible'
+
+  return (
         <StepWrapper isEnabled={isEnabled} onClickCapture={e => handleClick(e)} ref={reference as any}>
             <div className="step-description">
                 {showTitle && <h2>{ title } { required && '*'}</h2>}
-                {isLaptop && (multiple
-                    ? <p>Plusieurs choix possibles</p>
-                    : <p>Un choix possible</p>)}
+                {isLaptop && <p>{descriptionText}</p>}
               <ActionsWrapper>
                 {!required && !selectedItems.length &&
                   <Button text="Passer" icon="skip" textColor="var(--primary)" bgColor="white" onClick={() => handleValidation()} />}
@@ -157,12 +164,12 @@ export const Step: React.FC<StepProps> = (
                 multiple={multiple}
                 onValidation={handleValidation}
                 onSelected={handleSelectedItems}
+                onVisibleItemsChange={handleVisibleItemsChange}
                 required={required}
                 isValidated={isValidated}/>
             }
-          {!isLaptop && (multiple
-            ? <p>Plusieurs choix possibles</p>
-            : <p>Un choix possible</p>)}
+          {!isLaptop && <Dots itemsCount={items.length} selected={selectedItems} active={visibleItems}/>}
+          {!isLaptop && <p>{descriptionText}</p>}
         </StepWrapper>
     );
 }

@@ -14,10 +14,6 @@ const StepWrapper = styled.div<Partial<StepProps>>`
   overflow: scroll;
   height: 40rem;
   scroll-behavior: smooth;
-    
-  > div:last-child {
-      margin-bottom: 50%;
-  }
 `;
 
 type StepsProps = {
@@ -65,7 +61,7 @@ export const Steps: React.FC<StepsProps> = ({ steps, isLoading }) => {
                 // TODO : fix to set :
                 // - the first visible item (on scroll)
                 // - item must be active
-                //dispatch({type: 'steps/set-active', payload: steps[Math.min(...visibleSteps)]})
+                // dispatch({type: 'steps/set-active', payload: steps[visibleSteps[visibleSteps.length - 1]]})
             }
         }
     }

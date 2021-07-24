@@ -39,9 +39,9 @@ const ConfiguratorBannerWrapper = styled.div<ArrowProps>`
     top: 0;
     bottom: 0;
     width: 80vw;
-    height: 3rem;
     justify-content: flex-start;
     gap: 3rem;
+    padding: 0.6rem;
   }
 `;
 

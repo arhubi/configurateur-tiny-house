@@ -5,21 +5,26 @@ import { useDispatch } from "react-redux"
 import { device } from "../theme/device"
 
 const ItemsGridWrapper = styled.div`
-  display: grid;
-  width: 100%;
-  grid-template-columns: repeat(auto-fit, minmax(100vw, 100vw));
-  gap: 2rem;
-  overflow-x: scroll;
-  grid-auto-flow: column;
+    display: flex;
+    width: 100%;
+    scroll-snap-type: x mandatory;
+    overflow-x: scroll;
+    gap: 2rem;
+    
+    > * {
+        width: 90vw;
+        scroll-snap-align: start;
+    }
     
   @media screen and ${device.laptop} {
-      grid-template-columns: repeat(auto-fit, minmax(12vw, 1fr));
-      grid-template-rows: repeat(auto-fit, minmax(8vw, 1fr));
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12vw, 15vw));
     grid-auto-flow: initial;
     gap: 2rem;
     justify-items: start;
 
       > * {
+          width: auto;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -31,6 +36,7 @@ type ItemsGridProps = {
     items: ItemProps[];
     onValidation?: () => void;
     onSelected?: (selectedItems: number[]) => void;
+    onVisibleItemsChange?: (visibleItems: number[]) => void;
     isValidated?: boolean;
     category: string;
     required: boolean;
@@ -38,6 +44,7 @@ type ItemsGridProps = {
 };
 export const ItemsGrid: React.FC<ItemsGridProps> = (props) => {
     const [selected, setSelected] = useState<number[]>([])
+    const [visibleItems, setVisibleItems] = useState<number[]>([0])
     const dispatch = useDispatch()
 
     const handleClick = (index: number): void => {
@@ -72,10 +79,18 @@ export const ItemsGrid: React.FC<ItemsGridProps> = (props) => {
         }
     }
 
+    const handleVisibilityChange = (itemIndex: any, status: any) => {
+        setVisibleItems(visibleItems => status
+          ? [...visibleItems, itemIndex]
+          : visibleItems.filter(item => item !== itemIndex))
+        props?.onVisibleItemsChange?.(visibleItems)
+    }
+
     return (<ItemsGridWrapper>
         {props.items.map((item, index) =>
             <div key={index} onClick={() => handleClick(index)}>
-                <Item {...item} isSelected={selected.includes(index)} />
+                <Item {...item} isSelected={selected.includes(index)} onVisibilityChange={(newVisibilityStatus) =>
+                  handleVisibilityChange(index, newVisibilityStatus)} />
             </div>
         )}
     </ItemsGridWrapper>)

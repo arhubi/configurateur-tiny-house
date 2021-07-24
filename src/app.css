@@ -2,7 +2,7 @@
 
 :root {
   --header-height: 8rem;
-  --header-height-mobile: 5rem;
+  --header-height-mobile: 4rem;
   --configurator-banner-height: 3rem;
   --configurator-banner-height-mobile: 2rem;
   --body-height: calc(100vh - var(--header-height));

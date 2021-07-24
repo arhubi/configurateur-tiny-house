@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import styled from "styled-components"
 import { Icon } from "./Icon"
+import { device } from "../theme/device"
+import { useVisibility } from "../hooks/useVisibility"
 
 type Detail = {
   name: string;
@@ -15,6 +17,7 @@ export type ItemProps = {
     category?: string;
     isSelected?: boolean;
     onClick?: () => void;
+    onVisibilityChange?: (status: boolean) => void;
 }
 
 const ItemCard = styled.div<Partial<ItemProps>>`
@@ -22,9 +25,13 @@ const ItemCard = styled.div<Partial<ItemProps>>`
   flex-direction: column;
   position: relative;
   max-height: 15rem;
-  width: 15rem;
+  width: 90vw;
   border-radius: 0.4rem;
   margin: 0.2rem;
+  
+  @media screen and ${device.laptop} {
+    width: 15rem;
+  }
 
   :hover {
     cursor: pointer;
@@ -106,7 +113,7 @@ const ItemImage = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 0.4rem;
-  background: rgba(51, 51, 51, .8);
+  background: rgba(51, 51, 51, .6);
   height: 7rem;
   width: 100%;
 
@@ -123,23 +130,33 @@ export const Item: React.FC<ItemProps> = (
         price,
         image,
         details,
-        isSelected = false
-    }) =>
-      <ItemCard>
-        <ItemTopBlock isSelected={isSelected}>
-          <ItemImage>
-            {image
-              ? <img src={image} alt="item" />
-              : <Icon kind="camera-off" color="white" width="30" height="30" />}
-          </ItemImage>
-          <ItemMainInfos>
-            <div>
-              <div>{ name }</div>
-              <div>{ price } €</div>
-            </div>
-          </ItemMainInfos>
-        </ItemTopBlock>
-        {details && details.length > 0 && <ItemComplInfos isSelected={isSelected}>
-          {details?.map(detail => <div><p>{detail.name}</p><p>{detail.value}</p></div>)}
-        </ItemComplInfos>}
-    </ItemCard>
+        isSelected = false,
+        onVisibilityChange
+    }) => {
+  const reference = useRef()
+  const isVisible = useVisibility(reference, '0px')
+
+  useEffect(() => {
+    onVisibilityChange?.(isVisible)
+    // eslint-disable-next-line
+  }, [isVisible])
+
+  return <ItemCard ref={reference as any}>
+    <ItemTopBlock isSelected={isSelected}>
+      <ItemImage>
+        {image
+          ? <img src={image} alt="item"/>
+          : <Icon kind="camera-off" color="white" width="30" height="30"/>}
+      </ItemImage>
+      <ItemMainInfos>
+        <div>
+          <div>{name}</div>
+          <div>{price} €</div>
+        </div>
+      </ItemMainInfos>
+    </ItemTopBlock>
+    {details && details.length > 0 && <ItemComplInfos isSelected={isSelected}>
+      {details?.map(detail => <div><p>{detail.name}</p><p>{detail.value}</p></div>)}
+    </ItemComplInfos>}
+  </ItemCard>
+}
