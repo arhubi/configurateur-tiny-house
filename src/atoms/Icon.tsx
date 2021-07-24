@@ -3,6 +3,8 @@ import { ReactComponent as Arrow } from '../assets/icons/arrow.svg'
 import { ReactComponent as Skip } from '../assets/icons/skip.svg'
 import { ReactComponent as Plus } from "../assets/icons/plus.svg"
 import { ReactComponent as Cottage } from "../assets/icons/cottage.svg"
+import { ReactComponent as CameraOff } from '../assets/icons/camera-off.svg'
+
 
 import styled from "styled-components"
 
@@ -10,7 +12,8 @@ const icons = {
   arrow: <Arrow />,
   skip: <Skip />,
   plus: <Plus />,
-  cottage: <Cottage />
+  cottage: <Cottage />,
+  'camera-off': <CameraOff />
 }
 
 const IconWrapper = styled.div<IconProps>`

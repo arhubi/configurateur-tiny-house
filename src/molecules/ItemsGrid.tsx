@@ -1,22 +1,29 @@
-import React, { useState } from 'react';
-import styled from "styled-components";
-import { Item, ItemProps } from '../atoms/Item';
-import { useDispatch } from "react-redux";
-import { device } from "../theme/device";
+import React, { useState } from 'react'
+import styled from "styled-components"
+import { Item, ItemProps } from '../atoms/Item'
+import { useDispatch } from "react-redux"
+import { device } from "../theme/device"
 
 const ItemsGridWrapper = styled.div`
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(100vw, 100vw));
   gap: 2rem;
   overflow-x: scroll;
   grid-auto-flow: column;
-    align-items: center;
-
-  @media screen and ${device.laptop} {  
-    grid-auto-rows: minmax(150px, 1fr);
+    
+  @media screen and ${device.laptop} {
+      grid-template-columns: repeat(auto-fit, minmax(12vw, 1fr));
+      grid-template-rows: repeat(auto-fit, minmax(8vw, 1fr));
     grid-auto-flow: initial;
     gap: 2rem;
+    justify-items: start;
+
+      > * {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+      }
   }
 `
 
@@ -40,7 +47,7 @@ export const ItemsGrid: React.FC<ItemsGridProps> = (props) => {
             selected.forEach(_index => dispatch({type: 'items/remove', payload: props.items[_index]}))
             setSelected([props.items.length + 1])
             props?.onSelected?.([props.items.length + 1])
-            !props.multiple && props.onValidation?.();
+            !props.multiple && props.onValidation?.()
         } else if (!selected.includes(index)) {
             setSelected(selected => selected.filter(index => index !== (props.items.length + 1)))
             if (item) {

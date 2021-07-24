@@ -9,6 +9,7 @@ import '../app.css'
 
 import { ItemsGrid } from "./ItemsGrid"
 import { Button } from "../atoms/Button";
+import { useMediaQuery } from "../hooks/useMediaQuery";
 
 const StepWrapper = styled.div<Partial<StepProps>>`
   display: flex;
@@ -102,7 +103,9 @@ export const Step: React.FC<StepProps> = (
     const reference = useRef()
     const isVisible = useVisibility(reference, '0px 0px 0px 0px')
 
-    const handleClick = (e: React.MouseEvent) => !isEnabled && e.stopPropagation()
+  const isLaptop = useMediaQuery('laptop')
+
+  const handleClick = (e: React.MouseEvent) => !isEnabled && e.stopPropagation()
 
     const handleValidation = () => {
         if (isEnabled) {
@@ -136,14 +139,14 @@ export const Step: React.FC<StepProps> = (
         <StepWrapper isEnabled={isEnabled} onClickCapture={e => handleClick(e)} ref={reference as any}>
             <div className="step-description">
                 {showTitle && <h2>{ title } { required && '*'}</h2>}
-                {multiple
+                {isLaptop && (multiple
                     ? <p>Plusieurs choix possibles</p>
-                    : <p>Un choix possible</p>}
+                    : <p>Un choix possible</p>)}
               <ActionsWrapper>
                 {!required && !selectedItems.length &&
-                  <Button text="Passer" icon="skip" bgColor="var(--primary)" onClick={() => handleValidation()} />}
+                  <Button text="Passer" icon="skip" textColor="var(--primary)" bgColor="white" onClick={() => handleValidation()} />}
                 {multiple && selectedItems.length > 0 && !isValidated &&
-                  <Button text="Suivant" icon="arrow" bgColor="orange" onClick={() => handleValidation()} />
+                  <Button text="Suivant" icon="arrow" textColor="orange" bgColor="white" onClick={() => handleValidation()} />
                 }
               </ActionsWrapper>
             </div>
@@ -157,6 +160,9 @@ export const Step: React.FC<StepProps> = (
                 required={required}
                 isValidated={isValidated}/>
             }
+          {!isLaptop && (multiple
+            ? <p>Plusieurs choix possibles</p>
+            : <p>Un choix possible</p>)}
         </StepWrapper>
     );
 }

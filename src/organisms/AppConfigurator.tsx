@@ -71,7 +71,6 @@ export const AppConfigurator: React.FC = () => {
           const { data } = await axios.get(`/databases/${id}`)
           const title = data.title[0].plain_text
           const relatedSettings = settings.find((setting: any) => setting.title === title)
-          console.log(relatedSettings)
 
           const { data: postsData } = await axios.post(`/databases/${id}/query`)
           const itemsCount = getValidItems(postsData.results)
@@ -86,7 +85,6 @@ export const AppConfigurator: React.FC = () => {
           }
         })
       )
-      console.log('steps', steps)
       dispatch({ type: 'steps/set-all', payload: steps.filter((step: StepProps) => step.itemsCount > 0) })
       setIsLoading(false)
     })()
