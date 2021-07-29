@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export function useVisibility(ref: any, rootMargin = "0px") {
+export function useVisibility(ref: any, root: string | null, rootMargin = "0px") {
   const [isIntersecting, setIntersecting] = useState(false)
 
   useEffect(() => {
@@ -10,6 +10,7 @@ export function useVisibility(ref: any, rootMargin = "0px") {
         setIntersecting(entry.isIntersecting)
       },
       {
+        root: root ? document.querySelector(root) : null,
         rootMargin
       }
     )

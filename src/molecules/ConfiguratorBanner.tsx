@@ -20,7 +20,8 @@ const ConfiguratorBannerWrapper = styled.div<ArrowProps>`
   justify-content: space-between;
   gap: 1rem;
   padding: 0.5rem;
-  overflow: scroll;
+  overflow-x: scroll;
+  overflow-y: hidden;
   background-color: rgba(255, 165, 0, 0.8);
   backdrop-filter: blur(10px);
   color: white;

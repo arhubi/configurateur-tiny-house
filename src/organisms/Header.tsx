@@ -9,6 +9,7 @@ const HeaderWrapper = styled.div`
     grid-template-columns: 3fr 1fr;
     height: var(--header-height-mobile);
     box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.08) 0 0 0 1px;
+    padding: 0 0.4rem;
   
     @media screen and ${device.laptop} {
       grid-template-columns: 1fr 3fr 1fr;
@@ -54,6 +55,11 @@ const LogoWrapper = styled.div`
 .app-title h1 {
   margin-bottom: 0;
   margin-top: 0;
+  font-size: 1rem;
+  
+  @media screen and ${device.laptop} {
+    font-size: revert;
+  }
 }
 `;
 
@@ -66,6 +72,7 @@ const LinkWrapper = styled.div`
     
     p {
       margin: 0;
+      font-size: 0.6rem;
     }
   
     @media screen and ${device.laptop} {

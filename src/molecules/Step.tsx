@@ -103,7 +103,7 @@ export const Step: React.FC<StepProps> = (
     const [selectedItems, setSelectedItems] = useState<number[]>([])
     const [visibleItems, setVisibleItems] = useState<number[]>([0])
     const reference = useRef()
-    const isVisible = useVisibility(reference, '0px 0px 0px 0px')
+    const isVisible = useVisibility(reference, '#steps', '-300px 0px 0px 0px')
 
   const isLaptop = useMediaQuery('laptop')
 
@@ -130,7 +130,6 @@ export const Step: React.FC<StepProps> = (
     }, [isVisible])
 
   const handleVisibleItemsChange = (newVisibleItems: any) => {
-
     setVisibleItems(newVisibleItems.length ? [newVisibleItems[newVisibleItems.length - 1]] : [0])
   }
 
@@ -150,7 +149,7 @@ export const Step: React.FC<StepProps> = (
                 {showTitle && <h2>{ title } { required && '*'}</h2>}
                 {isLaptop && <p>{descriptionText}</p>}
               <ActionsWrapper>
-                {!required && !selectedItems.length &&
+                {!required && !selectedItems.length && !isValidated &&
                   <Button text="Passer" icon="skip" textColor="var(--primary)" bgColor="white" onClick={() => handleValidation()} />}
                 {multiple && selectedItems.length > 0 && !isValidated &&
                   <Button text="Suivant" icon="arrow" textColor="orange" bgColor="white" onClick={() => handleValidation()} />

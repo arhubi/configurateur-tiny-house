@@ -89,7 +89,7 @@ const ItemComplInfos = styled.div<Partial<ItemProps>>`
   background-color: ${({isSelected}) => isSelected ? 'rgba(255, 165, 0, 0.4)' : 'white'};
   transition: background-color 100ms ease-in;
   margin: 0 0.4rem 0;
-  border-radius: 0 0.4rem 0.4rem;
+  border-radius: 0 0 0.4rem 0.4rem;
   padding: 0.4rem;
   
   > div {
@@ -103,7 +103,8 @@ const ItemComplInfos = styled.div<Partial<ItemProps>>`
     }
 
     :hover {
-      background: white;
+      transition: background 200ms ease-in;
+      background: ${({isSelected}) => isSelected ? 'rgba(255, 255, 255, 0.6)' : 'rgba(255, 165, 0, 0.3)'};
     }
   }
 `
@@ -114,7 +115,7 @@ const ItemImage = styled.div`
   justify-content: center;
   border-radius: 0.4rem;
   background: rgba(51, 51, 51, .6);
-  height: 7rem;
+  height: 8rem;
   width: 100%;
 
   img {
@@ -134,7 +135,7 @@ export const Item: React.FC<ItemProps> = (
         onVisibilityChange
     }) => {
   const reference = useRef()
-  const isVisible = useVisibility(reference, '0px')
+  const isVisible = useVisibility(reference, null,'0px')
 
   useEffect(() => {
     onVisibilityChange?.(isVisible)
