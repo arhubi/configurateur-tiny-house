@@ -63,7 +63,7 @@ export const Steps: React.FC<StepsProps> = ({ steps, isLoading }) => {
                 // - item must be active
                 console.log('visible steps ', visibleSteps)
                 setTimeout(() => {
-                    dispatch({type: 'steps/set-active', payload: steps[Math.min(...visibleSteps)]})
+                    // dispatch({type: 'steps/set-active', payload: steps[Math.min(...visibleSteps)]})
                 }, 100)
             }
         }
