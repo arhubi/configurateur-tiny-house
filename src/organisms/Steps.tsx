@@ -52,26 +52,20 @@ export const Steps: React.FC<StepsProps> = ({ steps, isLoading }) => {
     }
 
     const handleVisibilityChange = (index: number, visible: boolean) => {
-        setVisibleSteps(visibleSteps => visible
-          ? [...visibleSteps, index]
-          : visibleSteps.filter(stepIndex => stepIndex !== index))
-        if (visibleSteps.length > 1) {
-            const firstStepVisible = steps[Math.min(...visibleSteps)]
-            if (firstStepVisible.isEnabled) {
-                // TODO : fix to set :
-                // - the first visible item (on scroll)
-                // - item must be active
-                console.log('visible steps ', visibleSteps)
-                setTimeout(() => {
-                    // dispatch({type: 'steps/set-active', payload: steps[Math.min(...visibleSteps)]})
-                }, 100)
-            }
+        setVisibleSteps(_visibleSteps => visible
+          ? [..._visibleSteps, index]
+          : _visibleSteps.filter(stepIndex => stepIndex !== index))
+    }
+
+    const handleScroll = () => {
+        const activeStepIndex = Math.min(...visibleSteps)
+        if (steps[activeStepIndex].isEnabled) {
+            dispatch({type: 'steps/set-active', payload: steps[activeStepIndex]})
         }
     }
 
-    return (<StepWrapper id="steps">
-        {!isLoading && steps
-            .map((step, index) =>
+    return (<StepWrapper id="steps" onScroll={() => handleScroll()}>
+        {!isLoading && steps.map((step, index) =>
             <Step {...step}
                   key={index}
                   onStepDone={() => handleStepDone(index)}

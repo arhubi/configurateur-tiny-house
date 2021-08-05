@@ -18,7 +18,7 @@ const ItemsGridWrapper = styled.div`
     
   @media screen and ${device.laptop} {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(12vw, 15vw));
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 15rem));
     grid-auto-flow: initial;
     gap: 2rem;
     justify-items: start;

@@ -47,7 +47,7 @@ const StepWrapper = styled.div<Partial<StepProps>>`
     }
     
     @media screen and ${device.laptop} {
-      width: 20%;
+      width: 12rem;
       text-align: left;
     }
     
@@ -103,7 +103,9 @@ export const Step: React.FC<StepProps> = (
     const [selectedItems, setSelectedItems] = useState<number[]>([])
     const [visibleItems, setVisibleItems] = useState<number[]>([0])
     const reference = useRef()
-    const isVisible = useVisibility(reference, '#steps', '-300px 0px 0px 0px')
+
+    // TODO : improve by using banner height
+    const isVisible = useVisibility(reference, '#steps',  `40px 0px 0px 0px`)
 
   const isLaptop = useMediaQuery('laptop')
 
