@@ -1,14 +1,14 @@
-import { Steps } from "./Steps";
-import { Summary } from "./Summary";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store";
-import axios from "axios";
-import { getValidItems, mapSettingsResults } from "../utils/notion";
-import { StepProps } from "../molecules/Step";
-import styled from "styled-components";
-import { device } from "../theme/device";
-import { ConfiguratorBanner } from "../molecules/ConfiguratorBanner";
+import { Steps } from "./Steps"
+import { Summary } from "./Summary"
+import React, { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { RootState } from "../store"
+import axios from "axios"
+import { getValidItems, mapSettingsResults } from "../utils/notion"
+import { StepProps } from "../molecules/Step"
+import styled from "styled-components"
+import { device } from "../theme/device"
+import { ConfiguratorBanner } from "../molecules/ConfiguratorBanner"
 
 const AppConfiguratorWrapper = styled.div`
   position: relative;

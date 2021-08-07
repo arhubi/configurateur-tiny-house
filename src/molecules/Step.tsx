@@ -1,16 +1,16 @@
-import React, {useEffect, useRef, useState} from 'react'
-import styled from "styled-components"
+import React, { useEffect, useRef, useState } from 'react'
+import styled from 'styled-components'
 
-import { ItemProps } from "../atoms/Item"
-import { getDbItems } from "../utils/notion"
-import { useVisibility } from "../hooks/useVisibility"
-import { device } from "../theme/device"
+import { ItemProps } from '../atoms/Item'
+import { getDbItems } from '../utils/notion'
+import { useVisibility } from '../hooks/useVisibility'
+import { device } from '../theme/device'
 import '../app.css'
 
-import { ItemsGrid } from "./ItemsGrid"
-import { Button } from "../atoms/Button";
-import { useMediaQuery } from "../hooks/useMediaQuery";
-import { Dots } from "./Dots";
+import { ItemsGrid } from './ItemsGrid'
+import { Button } from '../atoms/Button'
+import { useMediaQuery } from '../hooks/useMediaQuery'
+import { Dots } from './Dots'
 
 const StepWrapper = styled.div<Partial<StepProps>>`
   display: flex;
@@ -19,45 +19,26 @@ const StepWrapper = styled.div<Partial<StepProps>>`
   gap: 3rem;
   opacity: ${props => props.isEnabled ? 1 : 0.2};
   border-radius: 0.4rem;
-  padding: 1rem;
   cursor: ${props => !props.isEnabled && 'not-allowed'};
-  
+
   @media screen and ${device.laptop} {
     flex-direction: row;
     min-height: auto;
-}
+  }
 
   * {
     cursor: ${props => !props.isEnabled && 'not-allowed'};
   }
-  
+
   scroll-snap-align: start;
   animation: fade-in 1000ms ease;
-  
+
   h1 {
     margin-bottom: 0;
   }
-  
-  .step-description {
-    text-align: center;
-    width: 100%;
-    
-    p {
-      margin: 0;
-    }
-    
-    @media screen and ${device.laptop} {
-      width: 12rem;
-      text-align: left;
-    }
-    
-    > h2 {
-      margin: 0;
-    }
-  }
-  
+
   @keyframes fade-in {
-    0% { 
+    0% {
       opacity: 0;
     }
   }
@@ -67,71 +48,105 @@ const ActionsWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 1rem;
-  
+  margin: 1rem 0.2rem 0;
+
   @media screen and ${device.laptop} {
     justify-content: flex-start;
   }
 `
 
+const StepProperties = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: 0.2rem;
+  font-size: 0.8rem;
+  margin: 0.2rem;
+
+  > span {
+    background: white;
+    color: black;
+    margin: 0.2rem 0.4rem 0.2rem 0;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.2rem;
+  }
+`
+
+const StepDescription = styled.div`
+  text-align: center;
+  width: 100%;
+
+  p {
+    margin: 0;
+  }
+
+  @media screen and ${device.laptop} {
+    width: 16rem;
+    text-align: left;
+  }
+
+  > h2 {
+    margin: 0;
+  }
+`
+
 export type StepProps = {
-    title: string;
-    notionDbId: string;
-    itemsCount: number;
-    isActive?: boolean;
-    isEnabled?: boolean;
-    required?: boolean;
-    multiple?: boolean;
-    showTitle?: boolean;
-    onStepDone?: () => void;
-    onVisibilityChange?: (status: boolean) => void;
+  title: string;
+  notionDbId: string;
+  itemsCount: number;
+  isActive?: boolean;
+  isEnabled?: boolean;
+  required?: boolean;
+  multiple?: boolean;
+  showTitle?: boolean;
+  onStepDone?: () => void;
+  onVisibilityChange?: (status: boolean) => void;
 };
 export const Step: React.FC<StepProps> = (
-    {
-        title,
-        notionDbId,
-        isEnabled = false,
-        isActive = false,
-        required = true,
-        onStepDone,
-        onVisibilityChange,
-        multiple = false,
-        showTitle= true
-    }) => {
-    const [items, setItems] = useState<ItemProps[]>([])
-    const [isValidated, setIsValidated] = useState(false)
-    const [selectedItems, setSelectedItems] = useState<number[]>([])
-    const [visibleItems, setVisibleItems] = useState<number[]>([0])
-    const reference = useRef()
+  {
+    title,
+    notionDbId,
+    isEnabled = false,
+    isActive = false,
+    required = true,
+    onStepDone,
+    onVisibilityChange = () => {},
+    multiple = false,
+    showTitle = true
+  }) => {
+  const [items, setItems] = useState<ItemProps[]>([])
+  const [isValidated, setIsValidated] = useState(false)
+  const [selectedItems, setSelectedItems] = useState<number[]>([])
+  const [visibleItems, setVisibleItems] = useState<number[]>([0])
+  const reference = useRef()
 
-    // TODO : improve by using banner height
-    const isVisible = useVisibility(reference, '#steps',  `40px 0px 0px 0px`)
+  // TODO : improve by using banner height
+  const isVisible = useVisibility(reference, '#steps', `40px 0px 0px 0px`)
 
   const isLaptop = useMediaQuery('laptop')
 
   const handleClick = (e: React.MouseEvent) => !isEnabled && e.stopPropagation()
 
-    const handleValidation = () => {
-        if (isEnabled) {
-          onStepDone?.()
-          setIsValidated(true)
-        }
+  const handleValidation = () => {
+    if (isEnabled) {
+      onStepDone?.()
+      setIsValidated(true)
     }
+  }
 
-    const handleSelectedItems = (items: number[]) => {
-      setSelectedItems(items)
-    }
+  const handleSelectedItems = (items: number[]) => {
+    setSelectedItems(items)
+  }
 
-    useEffect(() => {
-        isActive && (reference?.current as any).scrollIntoView()
-    }, [isActive, reference])
+  useEffect(() => {
+    isActive && (reference?.current as any).scrollIntoView()
+  }, [isActive, reference])
 
-    useEffect(() => {
-      onVisibilityChange?.(isVisible)
-      // eslint-disable-next-line
-    }, [isVisible])
+  useEffect(() => {
+    onVisibilityChange(isVisible)
+    // eslint-disable-next-line
+  }, [isVisible])
 
-  const handleVisibleItemsChange = (newVisibleItems: any) => {
+  const handleVisibleItemsChange = (newVisibleItems: number[]) => {
     setVisibleItems(newVisibleItems.length ? [newVisibleItems[newVisibleItems.length - 1]] : [0])
   }
 
@@ -141,36 +156,54 @@ export const Step: React.FC<StepProps> = (
             setItems(items)
         })()
     // eslint-disable-next-line
-    }, [])
-
-  const descriptionText = multiple ? 'Plusieurs choix possibles' : 'Un choix possible'
+  }, [])
 
   return (
-        <StepWrapper isEnabled={isEnabled} onClickCapture={e => handleClick(e)} ref={reference as any}>
-            <div className="step-description">
-                {showTitle && <h2>{ title } { required && '*'}</h2>}
-                {isLaptop && <p>{descriptionText}</p>}
-              <ActionsWrapper>
-                {!required && !selectedItems.length && !isValidated &&
-                  <Button text="Passer" icon="skip" textColor="var(--primary)" bgColor="white" onClick={() => handleValidation()} />}
-                {multiple && selectedItems.length > 0 && !isValidated &&
-                  <Button text="Suivant" icon="arrow" textColor="orange" bgColor="white" onClick={() => handleValidation()} />
-                }
-              </ActionsWrapper>
-            </div>
-            {items.length > 0 &&
-              <ItemsGrid
-                items={items}
-                category={title}
-                multiple={multiple}
-                onValidation={handleValidation}
-                onSelected={handleSelectedItems}
-                onVisibleItemsChange={handleVisibleItemsChange}
-                required={required}
-                isValidated={isValidated}/>
+    <StepWrapper isEnabled={isEnabled} onClickCapture={e => handleClick(e)} ref={reference as any}>
+      <StepDescription>
+        {showTitle && <h2>{title}</h2>}
+        {isLaptop &&
+        <>
+          <StepProperties>
+            {required ? <span>Requis</span> : <span>Optionnel</span>}
+            {multiple && <span>Choix multiples</span>}
+          </StepProperties>
+          <ActionsWrapper>
+            {!required && !selectedItems.length && !isValidated &&
+            <Button text="Passer" icon="skip" textColor="var(--primary)" bgColor="white"
+                    onClick={() => handleValidation()}/>}
+            {multiple && selectedItems.length > 0 && !isValidated &&
+            <Button text="Suivant" icon="arrow" textColor="orange" bgColor="white" onClick={() => handleValidation()}/>
             }
-          {!isLaptop && <Dots itemsCount={items.length} selected={selectedItems} active={visibleItems}/>}
-          {!isLaptop && <p>{descriptionText}</p>}
-        </StepWrapper>
-    );
+          </ActionsWrapper>
+        </>}
+      </StepDescription>
+      {items.length > 0 &&
+        <ItemsGrid
+          items={items}
+          category={title}
+          multiple={multiple}
+          onValidation={handleValidation}
+          onSelected={handleSelectedItems}
+          onVisibleItemsChange={handleVisibleItemsChange}
+          required={required}
+          isValidated={isValidated}/>
+      }
+      {!isLaptop &&
+        <>
+          <Dots itemsCount={items.length} selected={selectedItems} active={visibleItems}/>
+          <ActionsWrapper>
+            {!required && !selectedItems.length && !isValidated &&
+            <Button text="Passer" icon="skip" textColor="var(--primary)" bgColor="white"
+                    onClick={() => handleValidation()}/>
+            }
+            {multiple && selectedItems.length > 0 && !isValidated &&
+            <Button text="Suivant" icon="arrow" textColor="orange" bgColor="white"
+                    onClick={() => handleValidation()}/>
+            }
+          </ActionsWrapper>
+        </>
+      }
+    </StepWrapper>
+  );
 }

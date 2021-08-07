@@ -9,7 +9,6 @@ const HeaderWrapper = styled.div`
     grid-template-columns: 3fr 1fr;
     height: var(--header-height-mobile);
     box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.08) 0 0 0 1px;
-    padding: 0 0.4rem;
   
     @media screen and ${device.laptop} {
       grid-template-columns: 1fr 3fr 1fr;
@@ -106,7 +105,7 @@ export const Header: React.FC = () => (
         <AppIntro>Configurez votre tiny house et estimez son prix en quelques clics !</AppIntro>
     </LogoIntroWrapper>
       <LinkWrapper>
-        <p>proposé par</p>
+        <p>par</p>
         <a href="https://www.guide-tinyhouse.com" target="_blank" rel="noreferrer">Guide Tiny House</a>
       </LinkWrapper>
   </HeaderWrapper>

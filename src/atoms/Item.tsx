@@ -10,14 +10,14 @@ type Detail = {
 }
 
 export type ItemProps = {
-    name: string;
-    price: number;
-    image?: string;
-    details?: Detail[];
-    category?: string;
-    isSelected?: boolean;
-    onClick?: () => void;
-    onVisibilityChange?: (status: boolean) => void;
+  name: string;
+  price: number;
+  image?: string;
+  details?: Detail[];
+  category?: string;
+  isSelected?: boolean;
+  onClick?: () => void;
+  onVisibilityChange?: (status: boolean) => void;
 }
 
 const ItemCard = styled.div<Partial<ItemProps>>`
@@ -27,10 +27,15 @@ const ItemCard = styled.div<Partial<ItemProps>>`
   max-height: 15rem;
   width: 90vw;
   border-radius: 0.4rem;
-  margin: 0.2rem;
-  
+  margin: 0 0.2rem 0 5vw;
+  background-color: ${({isSelected}) => isSelected ? 'rgba(255, 165, 0, 0.3)' : 'white'};
+  box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.08) 0 0 0 1px;
+  transition: box-shadow 100ms ease-in, background-color 100ms ease-in;
+
+
   @media screen and ${device.laptop} {
     width: 15rem;
+    margin: 0.2rem;
   }
 
   :hover {
@@ -41,13 +46,26 @@ const ItemCard = styled.div<Partial<ItemProps>>`
 const ItemTopBlock = styled.div<Partial<ItemProps>>`
   display: flex;
   position: relative;
-  border-radius: 0.4rem;
-  margin: 0.1rem;
-  z-index: 10;
-  box-shadow: ${({isSelected}) => isSelected
-          ? '0 0 0px 0.25rem orange'
-          : '0 0 0px 0px orange' };
+  margin: 0.3rem;
+  border-radius: 0.3rem;
+  z-index: 0;
+
   transition: box-shadow 100ms ease-in;
+
+  &::after {
+    content: '';
+    display: flex;
+    opacity: ${({isSelected}) => isSelected ? 1 : 0};
+    position: absolute;
+    left: -0.3rem;
+    top: -0.3rem;
+    background: orange;
+    width: calc(100% + 0.6rem);
+    height: calc(100% + 0.6rem);
+    z-index: -1;
+    border-radius: 0.4rem;
+    transition: opacity 100ms ease-in;
+  }
 `
 
 const ItemMainInfos = styled.div`
@@ -60,7 +78,7 @@ const ItemMainInfos = styled.div`
   > div {
     position: relative;
     height: 100%;
-    
+
     > div:nth-child(1) {
       position: absolute;
       top: 0;
@@ -76,9 +94,15 @@ const ItemMainInfos = styled.div`
       color: white;
       font-size: 1.2rem;
     }
+    
+    > button {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
   }
-  
-  `
+
+`
 
 const ItemComplInfos = styled.div<Partial<ItemProps>>`
   display: grid;
@@ -86,18 +110,17 @@ const ItemComplInfos = styled.div<Partial<ItemProps>>`
   position: relative;
   overflow: scroll;
   grid-template-columns: 1fr;
-  background-color: ${({isSelected}) => isSelected ? 'rgba(255, 165, 0, 0.4)' : 'white'};
   transition: background-color 100ms ease-in;
-  margin: 0 0.4rem 0;
+  margin-bottom: 0.2rem;
   border-radius: 0 0 0.4rem 0.4rem;
-  padding: 0.4rem;
-  
+  padding: 0.2rem;
+
   > div {
     display: flex;
     justify-content: space-between;
     border-radius: 0.4rem;
     padding: 0.3rem;
-    
+
     > p {
       margin: 0;
     }
@@ -113,7 +136,7 @@ const ItemImage = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.4rem;
+  border-radius: 0.3rem;
   background: rgba(51, 51, 51, .6);
   height: 8rem;
   width: 100%;
@@ -121,33 +144,37 @@ const ItemImage = styled.div`
   img {
     height: 100%;
     width: 100%;
-    border-radius: 0.4rem;
+    border-radius: 0.3rem;
+  }
+
+  @media screen and ${device.laptop} {
+    height: 8rem;
   }
 `
 
 export const Item: React.FC<ItemProps> = (
-    {
-        name,
-        price,
-        image,
-        details,
-        isSelected = false,
-        onVisibilityChange
-    }) => {
+  {
+    name,
+    price,
+    image,
+    details,
+    isSelected = false,
+    onVisibilityChange
+  }) => {
   const reference = useRef()
-  const isVisible = useVisibility(reference, null,'0px')
+  const isVisible = useVisibility(reference, null, '0px')
 
   useEffect(() => {
     onVisibilityChange?.(isVisible)
     // eslint-disable-next-line
   }, [isVisible])
 
-  return <ItemCard ref={reference as any}>
+  return <ItemCard ref={reference as any} isSelected={isSelected}>
     <ItemTopBlock isSelected={isSelected}>
       <ItemImage>
         {image
           ? <img src={image} alt="item"/>
-          : <Icon kind="camera-off" color="white" width="30" height="30"/>}
+          : <Icon kind="camera-off" color="white" strokeWidth={1} width="30" height="30"/>}
       </ItemImage>
       <ItemMainInfos>
         <div>
@@ -156,8 +183,15 @@ export const Item: React.FC<ItemProps> = (
         </div>
       </ItemMainInfos>
     </ItemTopBlock>
-    {details && details.length > 0 && <ItemComplInfos isSelected={isSelected}>
-      {details?.map(detail => <div><p>{detail.name}</p><p>{detail.value}</p></div>)}
-    </ItemComplInfos>}
+    {details && details.length > 0 &&
+      <ItemComplInfos isSelected={isSelected}>
+        {details?.map(detail =>
+          <div>
+            <p>{detail.name}</p>
+            <p>{detail.value}</p>
+          </div>)
+        }
+      </ItemComplInfos>
+    }
   </ItemCard>
 }

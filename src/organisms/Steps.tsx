@@ -1,19 +1,25 @@
 import { Step, StepProps } from "../molecules/Step"
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import styled from "styled-components"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { useMediaQuery } from "../hooks/useMediaQuery"
 import { LoadingScreen } from "../molecules/LoadingScreen"
+import { RootState } from "../store";
+import { device } from "../theme/device";
 
 const StepWrapper = styled.div<Partial<StepProps>>`
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 10vw;
   padding-bottom: 2rem;
   scroll-snap-type: y mandatory;
   overflow: scroll;
   height: 40rem;
   scroll-behavior: smooth;
+    
+  @media screen and ${device.laptop} {
+      gap: 3rem;
+  }
 `;
 
 type StepsProps = {
@@ -30,6 +36,7 @@ export const Steps: React.FC<StepsProps> = ({ steps, isLoading }) => {
     const isLaptop = useMediaQuery('laptop')
 
     const dispatch = useDispatch()
+    const selectionByScroll = useSelector((state: RootState) => state.selectionByScroll)
 
     useEffect(() => {
         !isLoading && setEnabledSteps(enabledSteps => [...enabledSteps, steps?.[0]?.title])
@@ -37,12 +44,22 @@ export const Steps: React.FC<StepsProps> = ({ steps, isLoading }) => {
     }, [isLoading])
 
     useEffect(() => {
+        dispatch({type: 'scroll-selection/lock'})
         dispatch({type: 'steps/set-active', payload: activeStep})
     }, [activeStep, dispatch])
 
     useEffect(() => {
         dispatch({type: 'steps/set-enabled-all', payload: enabledSteps})
     }, [enabledSteps, dispatch])
+
+    useEffect(() => {
+        console.log(visibleSteps)
+        const firstVisibleIndex = isFinite(Math.min(...visibleSteps)) && Math.min(...visibleSteps)
+        if (!selectionByScroll && firstVisibleIndex && steps[firstVisibleIndex] === steps.find(step => step.isActive)) {
+            dispatch({type: 'scroll-selection/unlock'})
+        }
+        // eslint-disable-next-line
+    }, [steps, activeStep, visibleSteps, dispatch])
 
     const handleStepDone = (index: number) => {
         if (index + 1 < steps.length) {
@@ -58,8 +75,9 @@ export const Steps: React.FC<StepsProps> = ({ steps, isLoading }) => {
     }
 
     const handleScroll = () => {
+        if (!selectionByScroll) return
         const activeStepIndex = Math.min(...visibleSteps)
-        if (steps[activeStepIndex].isEnabled) {
+        if (activeStepIndex > - 1 && steps[activeStepIndex].isEnabled) {
             dispatch({type: 'steps/set-active', payload: steps[activeStepIndex]})
         }
     }
