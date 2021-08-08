@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Icon } from './Icon'
 import { device } from '../theme/device'
 import { useVisibility } from '../hooks/useVisibility'
+import { cssVar, rgba } from 'polished'
 
 type Detail = {
   name: string;
@@ -29,9 +30,11 @@ const ItemCard = styled.div<Partial<ItemProps>>`
   height: 50vh;
   margin: 0.2rem;
   border-radius: 0.4rem;
-  background-color: ${({isSelected}) => isSelected ? 'rgba(255, 165, 0, 0.3)' : 'white'};
-  box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.08) 0 0 0 1px;
-  transition: box-shadow 100ms ease-in, background-color 100ms ease-in;
+  background-color: ${({isSelected}) => isSelected 
+          ? () => rgba(cssVar('--primary'), 0.4) 
+          : 'var(--bg-color)'};
+  box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.2) 0 0 0 1px;
+  transition: background-color 100ms ease-in;
   scroll-snap-align: start;
 
   @media screen and ${device.laptop} {
@@ -52,23 +55,6 @@ const ItemTopBlock = styled.div<Partial<ItemProps>>`
   margin: 0.3rem;
   border-radius: 0.3rem;
   z-index: 0;
-
-  transition: box-shadow 100ms ease-in;
-
-  &::after {
-    content: '';
-    display: flex;
-    opacity: ${({isSelected}) => isSelected ? 1 : 0};
-    position: absolute;
-    left: -0.3rem;
-    top: -0.3rem;
-    background: orange;
-    width: calc(100% + 0.6rem);
-    height: calc(100% + 0.6rem);
-    z-index: -1;
-    border-radius: 0.4rem;
-    transition: opacity 100ms ease-in;
-  }
 `
 
 const ItemMainInfos = styled.div`
@@ -86,7 +72,7 @@ const ItemMainInfos = styled.div`
       position: absolute;
       top: 0;
       left: 0;
-      color: white;
+      color: var(--bg-color);
       font-size: 1.2rem;
     }
 
@@ -94,7 +80,7 @@ const ItemMainInfos = styled.div`
       position: absolute;
       bottom: 0;
       right: 0;
-      color: white;
+      color: var(--bg-color);
       font-size: 1.2rem;
     }
     
@@ -130,7 +116,7 @@ const ItemComplInfos = styled.div<Partial<ItemProps>>`
 
     :hover {
       transition: background 200ms ease-in;
-      background: ${({isSelected}) => isSelected ? 'rgba(255, 255, 255, 0.6)' : 'rgba(255, 165, 0, 0.3)'};
+      background: ${({isSelected}) => () => rgba(cssVar('--primary'), isSelected ? 0.6 : 0.3)};
     }
   }
 `
@@ -152,7 +138,7 @@ const ItemImage = styled.div`
 
   @media screen and ${device.laptop} {
     height: 8rem;
-    background: rgba(51, 51, 51, .6);
+    background: ${() => rgba(cssVar('--primary'), 0.6)};
   }
 `
 
@@ -178,7 +164,7 @@ export const Item: React.FC<ItemProps> = (
       <ItemImage>
         {image
           ? <img src={image} alt="item"/>
-          : <Icon kind="camera-off" color="white" strokeWidth={1} width="30" height="30"/>}
+          : <Icon kind="camera-off" color="var(--bg-color)" strokeWidth={1} width="30" height="30"/>}
       </ItemImage>
       <ItemMainInfos>
         <div>

@@ -54,10 +54,10 @@ const StepProperties = styled.div`
   flex-wrap: wrap;
   padding-top: 0.2rem;
   font-size: 0.8rem;
-  margin: 0.2rem;
+  margin: 0.2rem 0.2rem 0.2rem 0;
 
   > span {
-    background: white;
+    background: var(--pure-white);
     color: black;
     margin: 0.2rem 0.4rem 0.2rem 0;
     padding: 0.2rem 0.4rem;
@@ -172,10 +172,10 @@ export const Step: React.FC<StepProps> = (
           </StepProperties>
           <ActionsWrapper>
             {!required && !selectedItems.length && !isValidated &&
-            <Button text="Passer" icon="skip" textColor="var(--text-color)" bgColor="white"
+            <Button text="Passer" icon="skip" textColor="var(--text-color)" bgColor="var(--bg-color)"
                     onClick={() => handleValidation()}/>}
             {multiple && selectedItems.length > 0 && !isValidated &&
-            <Button text="Suivant" icon="arrow" textColor="orange" bgColor="white" onClick={() => handleValidation()}/>
+            <Button text="Suivant" icon="arrow" textColor="var(--primary)" bgColor="var(--bg-color)" onClick={() => handleValidation()}/>
             }
           </ActionsWrapper>
         </>}
@@ -198,11 +198,11 @@ export const Step: React.FC<StepProps> = (
         </DotsWrapper>
         <ActionsWrapper>
           {!required && !selectedItems.length && !isValidated &&
-          <Button text="Passer" icon="skip" textColor="var(--text-color)" bgColor="white"
+          <Button text="Passer" icon="skip" textColor="var(--text-color)" bgColor="var(--bg-color)"
                   onClick={() => handleValidation()}/>
           }
           {multiple && selectedItems.length > 0 && !isValidated &&
-          <Button text="Suivant" icon="arrow" textColor="orange" bgColor="white"
+          <Button text="Suivant" icon="arrow" textColor="var(--primary)" bgColor="var(--bg-color)"
                   onClick={() => handleValidation()}/>
           }
         </ActionsWrapper>

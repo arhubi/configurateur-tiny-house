@@ -12,7 +12,7 @@ const LoaderWrapper = styled.div`
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background-color: white;
+  background-color: var(--bg-color);
   opacity: 0.6;
   position: absolute;
   top: 0;

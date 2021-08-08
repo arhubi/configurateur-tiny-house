@@ -18,11 +18,14 @@ const StepsWrapper = styled.div<Partial<StepProps>>`
     scroll-behavior: smooth;
     width: 90vw;
     height: calc(90vh - var(--header-height-mobile) - var(--configurator-banner-height-mobile));
+    
+    > div:nth-last-child(1) {
+        margin-bottom: calc(40rem);
+    }
 
     @media screen and ${device.laptop} {
         height: calc(80vh - var(--header-height) - var(--configurator-banner-height));
         width: 100%;
-        padding-bottom: 2rem;
         gap: 3rem;
     }
 `
@@ -80,7 +83,7 @@ export const Steps: React.FC<StepsProps> = ({ steps, isLoading }) => {
     const handleScroll = () => {
         if (!selectionByScroll) return
         const activeStepIndex = Math.min(...visibleSteps)
-        if (activeStepIndex > -1 && steps[activeStepIndex].isEnabled) {
+        if (activeStepIndex > -1 && steps[activeStepIndex]?.isEnabled) {
             dispatch({type: 'steps/set-active', payload: steps[activeStepIndex]})
         }
     }

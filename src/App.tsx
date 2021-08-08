@@ -25,7 +25,7 @@ const AppWrapper = styled.div`
   }
   
   a {
-    color: orange;
+    color: var(--primary);
     text-transform: uppercase;
     font-weight: bold;
     text-decoration: none;

@@ -2,16 +2,17 @@ import React from "react";
 import logo from "../assets/logo-transparent.png";
 import styled from "styled-components";
 import { device } from "../theme/device";
+import { useMediaQuery } from "../hooks/useMediaQuery";
 
 const HeaderWrapper = styled.div`
   display: grid;
   background-color: #F8F9F9;
   width: 100%;
   z-index: 10;
-  grid-template-columns: 3fr 1fr;
+  grid-template-columns: 2fr 1fr;
   height: var(--header-height-mobile);
-  box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.08) 0 0 0 1px;
-
+  box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.2) 0 0 0 1px;
+  
   @media screen and ${device.laptop} {
     position: fixed;
     grid-template-columns: 1fr 3fr 1fr;
@@ -48,8 +49,9 @@ const LogoWrapper = styled.div`
     gap: 1rem;
   }
 
-    .app-logo {
+  .app-logo {
     height: 3rem;
+    width: 3rem;
   }
 
   .app-title {
@@ -70,21 +72,26 @@ const LogoWrapper = styled.div`
 
 const LinkWrapper = styled.div`
   display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  flex-direction: column;
+  align-items: start;
+  justify-content: flex-start;
 
   p, a {
     margin: 0;
     font-size: 0.6rem;
   }
 
+  p::after {
+    content: " ";
+    white-space: pre;
+  }
+
+
   @media screen and ${device.laptop} {
     flex-direction: row;
     align-items: center;
     font-size: 1rem;
-    p {
-      margin-right: 0.4rem;
+    p, a {
+      font-size: 1rem;
     }
   }
 `;
@@ -98,22 +105,30 @@ const AppIntro = styled.p`
   }
 `;
 
-export const Header: React.FC = () => (
-  <HeaderWrapper>
+export const Header: React.FC = () => {
+  const isLaptop = useMediaQuery('laptop')
+
+  return (<HeaderWrapper>
     <LogoIntroWrapper>
       <LogoWrapper>
         <img src={logo} className="app-logo" alt="logo"/>
         <div className="app-title">
           <h1>Le Configurateur</h1>
+          {!isLaptop &&
+          <LinkWrapper>
+            <p>par</p>
+            <a href="https://www.guide-tinyhouse.com" target="_blank" rel="noreferrer">Guide Tiny House</a>
+          </LinkWrapper>
+          }
         </div>
       </LogoWrapper>
       <AppIntro>Configurez votre tiny house et estimez son prix en quelques clics !</AppIntro>
     </LogoIntroWrapper>
-    <LinkWrapper>
+    {isLaptop && <LinkWrapper>
       <p>par</p>
       <a href="https://www.guide-tinyhouse.com" target="_blank" rel="noreferrer">Guide Tiny House</a>
-    </LinkWrapper>
-  </HeaderWrapper>
-)
+    </LinkWrapper>}
+  </HeaderWrapper>)
+}
 
 

@@ -1,6 +1,6 @@
 import React from 'react'
-import styled from "styled-components";
-import { Icon, IconProps } from "./Icon"
+import styled from 'styled-components'
+import { Icon, IconProps } from './Icon'
 
 
 const ButtonWrapper = styled.button<Partial<ButtonProps> & {hasText: boolean }>`
@@ -15,7 +15,7 @@ const ButtonWrapper = styled.button<Partial<ButtonProps> & {hasText: boolean }>`
   padding: 0.4rem 0.6rem;
   cursor: pointer;
   font-size: 1rem;
-  box-shadow: ${({outlined }) => !outlined ? 'rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.08) 0 0 0 1px' : 'none'};
+  box-shadow: ${({outlined }) => !outlined ? 'rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.2) 0 0 0 1px' : 'none'};
 
   ${({hasText}) => hasText && `svg {
     margin-left: 0.4rem;
@@ -39,6 +39,6 @@ export const Button: React.FC<ButtonProps> = props =>
 
 Button.defaultProps = {
   bgColor: 'darkgray',
-  textColor: 'white',
+  textColor: 'var(--bg-color)',
   outlined: false
 }

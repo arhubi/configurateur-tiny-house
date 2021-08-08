@@ -1,6 +1,6 @@
-import { Loader } from "../atoms/Loader";
-import styled from "styled-components";
-import { version } from "../../package.json"
+import { Loader } from '../atoms/Loader'
+import styled from 'styled-components'
+import { version } from '../../package.json'
 
 const LoadingWrapper = styled.div`
   position: fixed;
@@ -12,8 +12,8 @@ const LoadingWrapper = styled.div`
   justify-content: center;
   height: 100vh;
   width: 100vw;
-  background-color: orange;
-  color: white;
+  background-color: var(--primary);
+  color: var(--bg-color);
   z-index: 30;
 `
 

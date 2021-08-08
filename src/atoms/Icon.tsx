@@ -1,4 +1,6 @@
 import React from 'react'
+import styled from 'styled-components'
+
 import { ReactComponent as Arrow } from '../assets/icons/arrow.svg'
 import { ReactComponent as Skip } from '../assets/icons/skip.svg'
 import { ReactComponent as Plus } from '../assets/icons/plus.svg'
@@ -6,9 +8,6 @@ import { ReactComponent as Cottage } from '../assets/icons/cottage.svg'
 import { ReactComponent as CameraOff } from '../assets/icons/camera-off.svg'
 import { ReactComponent as ChevronRight } from '../assets/icons/chevron-right.svg'
 import { ReactComponent as Link } from '../assets/icons/link.svg'
-
-
-import styled from "styled-components"
 
 const icons = {
   arrow: <Arrow />,
@@ -44,7 +43,7 @@ export const Icon: React.FC<IconProps> = props =>
   <IconWrapper {...props}>{icons[props.kind]}</IconWrapper>
 
 Icon.defaultProps = {
-  color: 'white',
+  color: 'var(--bg-color)',
   strokeWidth: 1.5,
   width: '20px',
   height: '20px'

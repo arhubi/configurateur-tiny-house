@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import styled from "styled-components"
+import styled from 'styled-components'
 import { Item, ItemProps } from '../atoms/Item'
-import { useDispatch } from "react-redux"
-import { device } from "../theme/device"
+import { useDispatch } from 'react-redux'
+import { device } from '../theme/device'
 
 const ItemsGridWrapper = styled.div`
   display: flex;

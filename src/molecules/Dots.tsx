@@ -19,10 +19,10 @@ const DotWrapper = styled.div<DotProps>`
   width: 10px;
   height: 10px;
   margin: 0.2rem;
-  background: ${({isSelected}) => isSelected ? 'orange' : 'var(--text-color)'};
+  background: ${({isSelected}) => isSelected ? 'var(--primary)' : 'var(--text-color)'};
   border-radius: 50%;
   border: 2px solid #F8F9F9;
-  box-shadow: ${({isActive}) => isActive ? '0 0 0 2px orange' : 'none'};
+  box-shadow: ${({isActive}) => isActive ? '0 0 0 1px var(--primary)' : 'none'};
 `
 
 type DotProps = {

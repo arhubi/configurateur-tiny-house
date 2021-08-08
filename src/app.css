@@ -8,8 +8,9 @@
   --body-height: calc(100vh - var(--header-height) - var(--configurator-banner-height));
   --body-height-mobile: calc(100vh - var(--header-height-mobile));
   --text-color: #333333;
-  --primary: #94A89A;
+  --primary: #BC3908;
   --bg-color: #F8F9F9;
+  --pure-white: #FFFFFF;
 }
 
 body {
