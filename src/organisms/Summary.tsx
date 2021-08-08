@@ -13,21 +13,21 @@ const SummaryWrapper = styled.div`
   width: 100vw;
   height: 4rem;
   bottom: 0;
+  left: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   background-color: white;
-  padding: 4rem 1rem 3rem;
+  padding: 2rem 0 1rem;
   border-radius: 1rem 1rem 0 0;
-  box-sizing: border-box;
   box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.08) 0 0 0 1px;
   z-index: 10;
 
   @media screen and ${device.laptop} {
     position: relative;
     width: auto;
-    height: auto;
+    height: calc(70vh - var(--configurator-banner-height) - var(--header-height));
     flex-direction: column;
     justify-content: space-between;
     align-items: center;

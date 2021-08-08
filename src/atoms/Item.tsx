@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react'
-import styled from "styled-components"
-import { Icon } from "./Icon"
-import { device } from "../theme/device"
-import { useVisibility } from "../hooks/useVisibility"
+import styled from 'styled-components'
+import { Icon } from './Icon'
+import { device } from '../theme/device'
+import { useVisibility } from '../hooks/useVisibility'
 
 type Detail = {
   name: string;
@@ -24,16 +24,19 @@ const ItemCard = styled.div<Partial<ItemProps>>`
   display: flex;
   flex-direction: column;
   position: relative;
-  max-height: 15rem;
-  width: 90vw;
+  max-height: 20rem;
+  width: 89.6vw;
+  height: 50vh;
+  margin: 0.2rem;
   border-radius: 0.4rem;
-  margin: 0 0.2rem 0 5vw;
   background-color: ${({isSelected}) => isSelected ? 'rgba(255, 165, 0, 0.3)' : 'white'};
   box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.08) 0 0 0 1px;
   transition: box-shadow 100ms ease-in, background-color 100ms ease-in;
-
+  scroll-snap-align: start;
 
   @media screen and ${device.laptop} {
+    max-height: 15rem;
+    height: auto;
     width: 15rem;
     margin: 0.2rem;
   }
@@ -137,11 +140,11 @@ const ItemImage = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 0.3rem;
-  background: rgba(51, 51, 51, .6);
-  height: 8rem;
+  height: 12rem;
   width: 100%;
 
   img {
+    object-fit: cover;
     height: 100%;
     width: 100%;
     border-radius: 0.3rem;
@@ -149,6 +152,7 @@ const ItemImage = styled.div`
 
   @media screen and ${device.laptop} {
     height: 8rem;
+    background: rgba(51, 51, 51, .6);
   }
 `
 
@@ -186,7 +190,7 @@ export const Item: React.FC<ItemProps> = (
     {details && details.length > 0 &&
       <ItemComplInfos isSelected={isSelected}>
         {details?.map(detail =>
-          <div>
+          <div key={detail.name}>
             <p>{detail.name}</p>
             <p>{detail.value}</p>
           </div>)

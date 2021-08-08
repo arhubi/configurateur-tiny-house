@@ -15,32 +15,26 @@ import { Dots } from './Dots'
 const StepWrapper = styled.div<Partial<StepProps>>`
   display: flex;
   flex-direction: column;
+  position: relative;
   min-height: var(--body-height-mobile);
-  gap: 3rem;
+  gap: 1rem;
   opacity: ${props => props.isEnabled ? 1 : 0.2};
   border-radius: 0.4rem;
   cursor: ${props => !props.isEnabled && 'not-allowed'};
+  scroll-snap-align: start;
 
   @media screen and ${device.laptop} {
     flex-direction: row;
     min-height: auto;
+    gap: 3rem;
   }
 
   * {
     cursor: ${props => !props.isEnabled && 'not-allowed'};
   }
 
-  scroll-snap-align: start;
-  animation: fade-in 1000ms ease;
-
   h1 {
     margin-bottom: 0;
-  }
-
-  @keyframes fade-in {
-    0% {
-      opacity: 0;
-    }
   }
 `
 
@@ -89,6 +83,14 @@ const StepDescription = styled.div`
   }
 `
 
+const DotsWrapper = styled.div`
+  position: absolute;
+  bottom: 10rem;
+  width: 100%;
+  text-align: center;
+`
+
+
 export type StepProps = {
   title: string;
   notionDbId: string;
@@ -120,9 +122,9 @@ export const Step: React.FC<StepProps> = (
   const reference = useRef()
 
   // TODO : improve by using banner height
-  const isVisible = useVisibility(reference, '#steps', `40px 0px 0px 0px`)
-
   const isLaptop = useMediaQuery('laptop')
+  const isVisible = useVisibility(reference, '#steps', `${isLaptop ? '40px' : '0px'} 0px 0px 0px`)
+
 
   const handleClick = (e: React.MouseEvent) => !isEnabled && e.stopPropagation()
 
@@ -150,11 +152,11 @@ export const Step: React.FC<StepProps> = (
     setVisibleItems(newVisibleItems.length ? [newVisibleItems[newVisibleItems.length - 1]] : [0])
   }
 
-    useEffect(() => {
-        (async () => {
-            const items: ItemProps[] = await getDbItems(title, notionDbId)
-            setItems(items)
-        })()
+  useEffect(() => {
+    (async () => {
+      const items: ItemProps[] = await getDbItems(title, notionDbId)
+      setItems(items)
+    })()
     // eslint-disable-next-line
   }, [])
 
@@ -170,7 +172,7 @@ export const Step: React.FC<StepProps> = (
           </StepProperties>
           <ActionsWrapper>
             {!required && !selectedItems.length && !isValidated &&
-            <Button text="Passer" icon="skip" textColor="var(--primary)" bgColor="white"
+            <Button text="Passer" icon="skip" textColor="var(--text-color)" bgColor="white"
                     onClick={() => handleValidation()}/>}
             {multiple && selectedItems.length > 0 && !isValidated &&
             <Button text="Suivant" icon="arrow" textColor="orange" bgColor="white" onClick={() => handleValidation()}/>
@@ -179,30 +181,32 @@ export const Step: React.FC<StepProps> = (
         </>}
       </StepDescription>
       {items.length > 0 &&
-        <ItemsGrid
-          items={items}
-          category={title}
-          multiple={multiple}
-          onValidation={handleValidation}
-          onSelected={handleSelectedItems}
-          onVisibleItemsChange={handleVisibleItemsChange}
-          required={required}
-          isValidated={isValidated}/>
+      <ItemsGrid
+        items={items}
+        category={title}
+        multiple={multiple}
+        onValidation={handleValidation}
+        onSelected={handleSelectedItems}
+        onVisibleItemsChange={handleVisibleItemsChange}
+        required={required}
+        isValidated={isValidated}/>
       }
       {!isLaptop &&
-        <>
+      <>
+        <DotsWrapper>
           <Dots itemsCount={items.length} selected={selectedItems} active={visibleItems}/>
-          <ActionsWrapper>
-            {!required && !selectedItems.length && !isValidated &&
-            <Button text="Passer" icon="skip" textColor="var(--primary)" bgColor="white"
-                    onClick={() => handleValidation()}/>
-            }
-            {multiple && selectedItems.length > 0 && !isValidated &&
-            <Button text="Suivant" icon="arrow" textColor="orange" bgColor="white"
-                    onClick={() => handleValidation()}/>
-            }
-          </ActionsWrapper>
-        </>
+        </DotsWrapper>
+        <ActionsWrapper>
+          {!required && !selectedItems.length && !isValidated &&
+          <Button text="Passer" icon="skip" textColor="var(--text-color)" bgColor="white"
+                  onClick={() => handleValidation()}/>
+          }
+          {multiple && selectedItems.length > 0 && !isValidated &&
+          <Button text="Suivant" icon="arrow" textColor="orange" bgColor="white"
+                  onClick={() => handleValidation()}/>
+          }
+        </ActionsWrapper>
+      </>
       }
     </StepWrapper>
   );

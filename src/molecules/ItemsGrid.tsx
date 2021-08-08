@@ -11,24 +11,12 @@ const ItemsGridWrapper = styled.div`
   overflow-x: scroll;
   gap: 2rem;
 
-  > * {
-    width: 90vw;
-    scroll-snap-align: start;
-  }
-
   @media screen and ${device.laptop} {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(12rem, 15rem));
     grid-auto-flow: initial;
     gap: 2rem;
     justify-items: start;
-
-    > * {
-      width: auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
   }
 `
 

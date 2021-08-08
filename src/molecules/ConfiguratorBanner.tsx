@@ -20,15 +20,13 @@ const ConfiguratorBannerWrapper = styled.div<ArrowProps>`
   justify-content: space-between;
   gap: 1rem;
   padding: 0.5rem;
-  overflow-x: scroll;
-  overflow-y: hidden;
+  overflow: scroll hidden;
   background-color: rgba(255, 165, 0, 0.8);
   backdrop-filter: blur(10px);
   color: white;
   border-radius: 0.6rem;
   z-index: 20;
   height: var(--configurator-banner-height-mobile);
-  flex-shrink: 0;
   width: 80vw;
   margin-top: 0.2rem;
   box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.08) 0 0 0 1px;
@@ -43,10 +41,12 @@ const ConfiguratorBannerWrapper = styled.div<ArrowProps>`
     top: 0;
     bottom: 0;
     width: 80vw;
+    height: var(--configurator-banner-height);
+    padding: 1.8rem 0.6rem;
+    box-sizing: border-box;
     border-radius: 0.4rem;
     justify-content: flex-start;
-    gap: 3rem;
-    padding: 0.6rem;
+    gap: 1rem;
   }
 `;
 
@@ -72,7 +72,7 @@ const BannerStep = styled.div<{ isActive: boolean, isEnabled: boolean}>`
   align-items: center;
   justify-content: center;
   cursor: ${({isEnabled}) => isEnabled ? 'pointer' : 'not-allowed'};
-  color: ${({isEnabled}) => isEnabled ? 'var(--primary)': 'white'};
+  color: ${({isEnabled}) => isEnabled ? 'var(--text-color)': 'white'};
   padding: 0.4rem;
   
   ${({isActive}) => isActive && `
@@ -82,11 +82,17 @@ const BannerStep = styled.div<{ isActive: boolean, isEnabled: boolean}>`
   `}
 `
 
+const StepInfos = styled.div`
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+`
+
 const StepTitle = styled.div`
+ h1 {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
- h1 {
    margin: 0;
  }
 `
@@ -121,11 +127,11 @@ export const ConfiguratorBanner: React.FC = () => {
 
   return <ConfiguratorBannerWrapper>
     {isLaptop && steps.map((step: any, index: number) =>
-      <>
+      <React.Fragment key={step.title}>
         <BannerStep isActive={step.isActive} isEnabled={step.isEnabled} key={step.title}
                     onClick={() => handleStepActivation(step)}>{step.title}</BannerStep>
         {index < steps.length - 1 && <Icon kind="chevron-right" color={steps[index +1]?.isEnabled ? "#333333" : "white"}/>}
-      </>
+      </React.Fragment>
     )}
     {!isLaptop && steps[activeStepIndex] && (<>
       <CustomArrow horizRotation
@@ -133,13 +139,13 @@ export const ConfiguratorBanner: React.FC = () => {
                    onClick={() => handleStepActivation(steps[activeStepIndex - 1])}>
         <Icon kind="chevron-right" color="#333" />
       </CustomArrow>
-      <div>
+      <StepInfos>
         <StepTitle><h1>{steps[activeStepIndex].title}</h1></StepTitle>
         <StepProperties>
           {steps[activeStepIndex].required ? <span>Requis</span> : <span>Optionnel</span>}
           {steps[activeStepIndex].multiple && <span>Choix multiples</span>}
         </StepProperties>
-      </div>
+      </StepInfos>
       <CustomArrow
         visible={activeStepIndex < steps.length - 1 && steps[activeStepIndex + 1].isEnabled}
         onClick={() => handleStepActivation(steps[activeStepIndex + 1])}>
@@ -147,7 +153,6 @@ export const ConfiguratorBanner: React.FC = () => {
       </CustomArrow>
     </>)
     }
-
   </ConfiguratorBannerWrapper>
 }
 
