@@ -18,23 +18,20 @@ const SummaryWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: var(--bg-color);
+  background-color: var(--pure-white);
   padding: 2rem 0 1rem;
   border-radius: 1rem 1rem 0 0;
-  box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.2) 0 0 0 1px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.03) 0 0 0 1px;
   z-index: 10;
 
   @media screen and ${device.laptop} {
     position: relative;
     width: auto;
     height: calc(80vh - var(--configurator-banner-height) - var(--header-height));
-    flex-direction: column;
     justify-content: space-between;
-    align-items: center;
-    background-color: var(--bg-color);
-    margin: 2rem;
+    margin: 0 2rem 2rem 2rem;
     padding: 1rem;
-    border-radius: 1rem;
+    border-radius: 0.6rem;
   }
 
   h1, h2 {

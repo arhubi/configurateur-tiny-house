@@ -21,7 +21,7 @@ const DotWrapper = styled.div<DotProps>`
   margin: 0.2rem;
   background: ${({isSelected}) => isSelected ? 'var(--primary)' : 'var(--text-color)'};
   border-radius: 50%;
-  border: 2px solid #F8F9F9;
+  border: 2px solid var(--bg-color);
   box-shadow: ${({isActive}) => isActive ? '0 0 0 1px var(--primary)' : 'none'};
 `
 

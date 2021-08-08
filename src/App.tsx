@@ -9,7 +9,7 @@ const AppWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   font-family: 'Raleway', sans-serif;
-  background-color: #F8F9F9;
+  background-color: var(--bg-color);
   max-width: 100vw;
 
   h1, h2 {

@@ -6,15 +6,16 @@ import { useMediaQuery } from "../hooks/useMediaQuery";
 
 const HeaderWrapper = styled.div`
   display: grid;
-  background-color: #F8F9F9;
+  background-color: var(--pure-white);
   width: 100%;
   z-index: 10;
   grid-template-columns: 2fr 1fr;
   height: var(--header-height-mobile);
-  box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.2) 0 0 0 1px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.03) 0 0 0 1px;
   
   @media screen and ${device.laptop} {
     position: fixed;
+    background-color: var(--bg-color);
     grid-template-columns: 1fr 3fr 1fr;
     height: var(--header-height);
     box-shadow: none;
@@ -74,6 +75,7 @@ const LinkWrapper = styled.div`
   display: flex;
   align-items: start;
   justify-content: flex-start;
+  font-size: 0.6rem;
 
   p, a {
     margin: 0;
@@ -90,6 +92,7 @@ const LinkWrapper = styled.div`
     flex-direction: row;
     align-items: center;
     font-size: 1rem;
+    
     p, a {
       font-size: 1rem;
     }

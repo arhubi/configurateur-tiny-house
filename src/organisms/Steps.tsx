@@ -11,9 +11,7 @@ const StepsWrapper = styled.div<Partial<StepProps>>`
     display: flex;
     flex-direction: column;
     gap: 10vw;
-    margin: 0.2rem;
     scroll-snap-type: y mandatory;
-    scroll-margin: 0.2rem;
     overflow: scroll;
     scroll-behavior: smooth;
     width: 90vw;

@@ -3,13 +3,13 @@
 :root {
   --header-height: 8rem;
   --header-height-mobile: 4rem;
-  --configurator-banner-height: 2.5rem;
+  --configurator-banner-height: 2rem;
   --configurator-banner-height-mobile: 2.5rem;
   --body-height: calc(100vh - var(--header-height) - var(--configurator-banner-height));
   --body-height-mobile: calc(100vh - var(--header-height-mobile));
   --text-color: #333333;
   --primary: #BC3908;
-  --bg-color: #F8F9F9;
+  --bg-color: #FFFCFC;
   --pure-white: #FFFFFF;
 }
 

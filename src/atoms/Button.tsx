@@ -15,7 +15,7 @@ const ButtonWrapper = styled.button<Partial<ButtonProps> & {hasText: boolean }>`
   padding: 0.4rem 0.6rem;
   cursor: pointer;
   font-size: 1rem;
-  box-shadow: ${({outlined }) => !outlined ? 'rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.2) 0 0 0 1px' : 'none'};
+  box-shadow: ${({outlined }) => !outlined ? 'rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.03) 0 0 0 1px' : 'none'};
 
   ${({hasText}) => hasText && `svg {
     margin-left: 0.4rem;
@@ -38,7 +38,7 @@ export const Button: React.FC<ButtonProps> = props =>
   </ButtonWrapper>
 
 Button.defaultProps = {
-  bgColor: 'darkgray',
-  textColor: 'var(--bg-color)',
+  bgColor: 'var(--pure-white)',
+  textColor: 'var(--text-color)',
   outlined: false
 }

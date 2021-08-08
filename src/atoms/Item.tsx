@@ -26,15 +26,17 @@ const ItemCard = styled.div<Partial<ItemProps>>`
   flex-direction: column;
   position: relative;
   max-height: 20rem;
-  width: 89.6vw;
+  width: 89.4vw;
   height: 50vh;
   margin: 0.2rem;
   border-radius: 0.4rem;
   background-color: ${({isSelected}) => isSelected 
-          ? () => rgba(cssVar('--primary'), 0.4) 
-          : 'var(--bg-color)'};
-  box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.2) 0 0 0 1px;
-  transition: background-color 100ms ease-in;
+    ? () => rgba(cssVar('--primary'), 0.4) 
+    : 'var(--pure-white)'};
+  box-shadow: ${({isSelected}) => isSelected 
+    ? 'rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.1) 0 0 0 1px'
+    : `rgba(0, 0, 0, 0.05) 0 6px 24px 0, ${rgba(cssVar('--primary'), 0.03)} 0 0 0 1px`};
+  transition: all 100ms ease-in;
   scroll-snap-align: start;
 
   @media screen and ${device.laptop} {
@@ -128,6 +130,7 @@ const ItemImage = styled.div`
   border-radius: 0.3rem;
   height: 12rem;
   width: 100%;
+  background: ${() => rgba(cssVar('--primary'), 0.6)};
 
   img {
     object-fit: cover;
@@ -138,7 +141,6 @@ const ItemImage = styled.div`
 
   @media screen and ${device.laptop} {
     height: 8rem;
-    background: ${() => rgba(cssVar('--primary'), 0.6)};
   }
 `
 

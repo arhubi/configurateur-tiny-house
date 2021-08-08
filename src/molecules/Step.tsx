@@ -172,10 +172,10 @@ export const Step: React.FC<StepProps> = (
           </StepProperties>
           <ActionsWrapper>
             {!required && !selectedItems.length && !isValidated &&
-            <Button text="Passer" icon="skip" textColor="var(--text-color)" bgColor="var(--bg-color)"
+            <Button text="Passer" icon="skip" textColor="var(--text-color)"
                     onClick={() => handleValidation()}/>}
             {multiple && selectedItems.length > 0 && !isValidated &&
-            <Button text="Suivant" icon="arrow" textColor="var(--primary)" bgColor="var(--bg-color)" onClick={() => handleValidation()}/>
+            <Button text="Suivant" icon="arrow" textColor="var(--primary)" onClick={() => handleValidation()}/>
             }
           </ActionsWrapper>
         </>}
@@ -198,11 +198,11 @@ export const Step: React.FC<StepProps> = (
         </DotsWrapper>
         <ActionsWrapper>
           {!required && !selectedItems.length && !isValidated &&
-          <Button text="Passer" icon="skip" textColor="var(--text-color)" bgColor="var(--bg-color)"
+          <Button text="Passer" icon="skip" textColor="var(--text-color)"
                   onClick={() => handleValidation()}/>
           }
           {multiple && selectedItems.length > 0 && !isValidated &&
-          <Button text="Suivant" icon="arrow" textColor="var(--primary)" bgColor="var(--bg-color)"
+          <Button text="Suivant" icon="arrow" textColor="var(--primary)"
                   onClick={() => handleValidation()}/>
           }
         </ActionsWrapper>
