@@ -1,10 +1,10 @@
-import React from "react"
-import styled from "styled-components"
-import { useSelector } from "react-redux"
-import { RootState } from "../store"
-import { useMediaQuery } from "../hooks/useMediaQuery"
-import { Button } from "../atoms/Button"
-import { device } from "../theme/device"
+import React from 'react'
+import styled from 'styled-components'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../store'
+import { useMediaQuery } from '../../hooks/useMediaQuery'
+import { Button } from '../atoms/Button'
+import { device } from '../../theme/device'
 
 export type SummaryProps = {};
 

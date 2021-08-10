@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react'
 import styled from 'styled-components'
-import { Icon } from './Icon'
-import { device } from '../theme/device'
-import { useVisibility } from '../hooks/useVisibility'
 import { cssVar, rgba } from 'polished'
+import { device } from '../../theme/device'
+import { useVisibility } from '../../hooks/useVisibility'
+import { Icon } from './Icon'
 
 type Detail = {
   name: string;

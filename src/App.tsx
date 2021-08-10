@@ -1,8 +1,8 @@
 import React from 'react'
-import { Header } from "./organisms/Header"
-import styled from "styled-components"
-import { device } from "./theme/device"
-import { AppConfigurator } from "./organisms/AppConfigurator"
+import { Header } from './components/organisms/Header'
+import styled from 'styled-components'
+import { device } from './theme/device'
+import { AppConfigurator } from './components/organisms/AppConfigurator'
 
 const AppWrapper = styled.div`
   display: flex;

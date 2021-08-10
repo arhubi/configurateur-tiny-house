@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { ItemProps } from '../atoms/Item'
+import { ItemProps } from '../components/atoms/Item'
 import { isValidUrl } from './index'
 
 const propsMapping = {

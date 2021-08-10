@@ -1,11 +1,11 @@
-import { Step, StepProps } from "../molecules/Step"
-import React, { useEffect, useState } from "react"
-import styled from "styled-components"
-import { useDispatch, useSelector } from "react-redux"
-import { useMediaQuery } from "../hooks/useMediaQuery"
-import { LoadingScreen } from "../molecules/LoadingScreen"
-import { RootState } from "../store";
-import { device } from "../theme/device";
+import { Step, StepProps } from '../molecules/Step'
+import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
+import { useDispatch, useSelector } from 'react-redux'
+import { useMediaQuery } from '../../hooks/useMediaQuery'
+import { LoadingScreen } from '../molecules/LoadingScreen'
+import { RootState } from '../../store'
+import { device } from '../../theme/device'
 
 const StepsWrapper = styled.div<Partial<StepProps>>`
     display: flex;

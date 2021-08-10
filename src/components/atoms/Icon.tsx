@@ -1,13 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { ReactComponent as Arrow } from '../assets/icons/arrow.svg'
-import { ReactComponent as Skip } from '../assets/icons/skip.svg'
-import { ReactComponent as Plus } from '../assets/icons/plus.svg'
-import { ReactComponent as Cottage } from '../assets/icons/cottage.svg'
-import { ReactComponent as CameraOff } from '../assets/icons/camera-off.svg'
-import { ReactComponent as ChevronRight } from '../assets/icons/chevron-right.svg'
-import { ReactComponent as Link } from '../assets/icons/link.svg'
+import { ReactComponent as Arrow } from '../../assets/icons/arrow.svg'
+import { ReactComponent as Skip } from '../../assets/icons/skip.svg'
+import { ReactComponent as Plus } from '../../assets/icons/plus.svg'
+import { ReactComponent as Cottage } from '../../assets/icons/cottage.svg'
+import { ReactComponent as CameraOff } from '../../assets/icons/camera-off.svg'
+import { ReactComponent as ChevronRight } from '../../assets/icons/chevron-right.svg'
+import { ReactComponent as Link } from '../../assets/icons/link.svg'
 
 const icons = {
   arrow: <Arrow />,

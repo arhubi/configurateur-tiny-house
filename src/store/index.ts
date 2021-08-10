@@ -1,6 +1,6 @@
-import { Action, combineReducers, createStore } from "@reduxjs/toolkit"
-import { ItemProps } from "../atoms/Item"
-import { StepProps } from "../molecules/Step"
+import { Action, combineReducers, createStore } from '@reduxjs/toolkit'
+import { ItemProps } from '../components/atoms/Item'
+import { StepProps } from '../components/molecules/Step'
 
 type State = {
   items: ItemProps[];

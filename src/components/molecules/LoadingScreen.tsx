@@ -1,6 +1,6 @@
 import { Loader } from '../atoms/Loader'
 import styled from 'styled-components'
-import { version } from '../../package.json'
+import { version } from '../../../package.json'
 
 const LoadingWrapper = styled.div`
   position: fixed;

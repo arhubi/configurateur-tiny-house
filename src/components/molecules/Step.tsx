@@ -2,14 +2,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { ItemProps } from '../atoms/Item'
-import { getDbItems } from '../utils/notion'
-import { useVisibility } from '../hooks/useVisibility'
-import { device } from '../theme/device'
-import '../app.css'
+import { getDbItems } from '../../utils/notion'
+import { useVisibility } from '../../hooks/useVisibility'
+import { device } from '../../theme/device'
 
 import { ItemsGrid } from './ItemsGrid'
 import { Button } from '../atoms/Button'
-import { useMediaQuery } from '../hooks/useMediaQuery'
+import { useMediaQuery } from '../../hooks/useMediaQuery'
 import { Dots } from './Dots'
 
 const StepWrapper = styled.div<Partial<StepProps>>`

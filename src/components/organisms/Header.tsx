@@ -1,8 +1,8 @@
-import React from "react";
-import logo from "../assets/logo-transparent.png";
-import styled from "styled-components";
-import { device } from "../theme/device";
-import { useMediaQuery } from "../hooks/useMediaQuery";
+import React from 'react'
+import logo from '../../assets/logo-transparent.png'
+import styled from 'styled-components'
+import { device } from '../../theme/device'
+import { useMediaQuery } from '../../hooks/useMediaQuery'
 
 const HeaderWrapper = styled.div`
   display: grid;

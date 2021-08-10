@@ -1,12 +1,12 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../store'
 import styled from 'styled-components'
-import { StepProps } from './Step'
-import { device } from '../theme/device'
-import { useMediaQuery } from '../hooks/useMediaQuery'
-import { Icon } from '../atoms/Icon'
 import { cssVar, rgba } from 'polished'
+import { StepProps } from './Step'
+import { Icon } from '../atoms/Icon'
+import { RootState } from '../../store'
+import { device } from '../../theme/device'
+import { useMediaQuery } from '../../hooks/useMediaQuery'
 
 type ArrowProps = {
   horizRotation?: boolean;
