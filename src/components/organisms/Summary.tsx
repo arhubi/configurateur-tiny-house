@@ -5,6 +5,7 @@ import { RootState } from '../../store'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
 import { Button } from '../atoms/Button'
 import { device } from '../../theme/device'
+import { SummaryItem } from '../molecules/SummaryItem'
 
 export type SummaryProps = {};
 
@@ -30,23 +31,34 @@ const SummaryWrapper = styled.div`
     height: calc(80vh - var(--configurator-banner-height) - var(--header-height));
     justify-content: space-between;
     margin: 0 2rem 2rem 2rem;
-    padding: 1rem;
+    padding: 0.4rem;
     border-radius: 0.6rem;
   }
 
   h1, h2 {
     margin: 0;
   }
-`;
+`
+
+const ItemsWrapper = styled.div`
+  display: grid;
+  height: 100%;
+  width: 100%;
+  align-items: start;
+  gap: 0.4rem;
+`
 
 export const Summary: React.FC<SummaryProps> = () => {
-  const itemsState = useSelector((state: RootState) => state.items)
-  const totalPrice = itemsState.reduce((acc, item) => acc + item.price, 0)
+  const selectedItems = useSelector((state: RootState) => state.items)
+  const totalPrice = selectedItems.reduce((acc, item) => acc + item.price, 0)
 
   const isLaptop = useMediaQuery('laptop')
 
   return (
     <SummaryWrapper>
+      <ItemsWrapper>
+      {selectedItems.map(item => <SummaryItem {...item} />)}
+      </ItemsWrapper>
       {isLaptop && <h2>Bilan des courses</h2>}
       <h2>{totalPrice}€ TTC</h2>
       {!isLaptop && <Button text="Détails" outlined textColor="var(--primary)" icon="cottage"/>}

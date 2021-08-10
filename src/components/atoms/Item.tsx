@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { cssVar, rgba } from 'polished'
 import { device } from '../../theme/device'
 import { useVisibility } from '../../hooks/useVisibility'
-import { Icon } from './Icon'
+import { Image} from './Image'
 
 type Detail = {
   name: string;
@@ -164,9 +164,7 @@ export const Item: React.FC<ItemProps> = (
   return <ItemCard ref={reference as any} isSelected={isSelected}>
     <ItemTopBlock isSelected={isSelected}>
       <ItemImage>
-        {image
-          ? <img src={image} alt="item"/>
-          : <Icon kind="camera-off" color="var(--bg-color)" strokeWidth={1} width="30" height="30"/>}
+        <Image src={image} alt="item" fallbackIconSize={"40"} />
       </ItemImage>
       <ItemMainInfos>
         <div>
