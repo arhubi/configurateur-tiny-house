@@ -7,3 +7,10 @@ export function isValidUrl(str: string): boolean {
         '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
     return pattern.test(str);
 }
+
+export function groupBy(xs: any[], key: string | number) {
+    return xs.reduce((rv, x) => {
+        (rv[x[key]] = rv[x[key]] || []).push(x);
+        return rv;
+    }, {});
+};

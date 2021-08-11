@@ -9,7 +9,10 @@ const SummaryItemWrapper = styled.div`
   background: var(--bg-color);
   border-radius: 0.4rem;
   height: 3rem;
-  box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.03) 0 0 0 1px;
+  width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  border: 1px solid rgba(0, 0, 0, 0.05);
 `
 
 const ImageWrapper = styled.div`

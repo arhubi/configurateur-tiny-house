@@ -27,7 +27,7 @@ const AppVersion = styled.div`
 export const LoadingScreen: React.FC = () => {
     return (
         <LoadingWrapper>
-          <h2>Chargement du configurateur en cours...</h2>
+          <h2>Chargement en cours...</h2>
           <Loader />
           <AppVersion>Version { version }</AppVersion>
         </LoadingWrapper>
