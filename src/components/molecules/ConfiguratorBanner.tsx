@@ -22,7 +22,7 @@ const ConfiguratorBannerWrapper = styled.div<ArrowProps>`
   gap: 1rem;
   padding: 0.5rem;
   overflow: scroll hidden;
-  background-color: ${() => rgba(cssVar('--primary'), 0.8)};
+  background-color: ${() => rgba(cssVar('--primary'), 1)};
   backdrop-filter: blur(10px);
   color: var(--bg-color);
   border-radius: 0.6rem;
@@ -129,7 +129,7 @@ export const ConfiguratorBanner: React.FC = () => {
   }
 
   return <ConfiguratorBannerWrapper>
-    {isLaptop && steps.map((step: any, index: number) =>
+    {isLaptop && steps.filter((step: any) => step.isEnabled).map((step: any, index: number) =>
       <React.Fragment key={step.title}>
         <BannerStep isActive={step.isActive} isEnabled={step.isEnabled} key={step.title}
                     onClick={() => handleStepActivation(step)}>{step.title}</BannerStep>

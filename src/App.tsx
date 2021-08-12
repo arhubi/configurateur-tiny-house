@@ -30,10 +30,6 @@ const AppWrapper = styled.div`
     font-weight: bold;
     text-decoration: none;
   }
-
-  p {
-    font-size: 1rem;
-  }
 `;
 
 const AppBody = styled.div`

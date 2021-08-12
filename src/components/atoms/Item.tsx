@@ -27,7 +27,7 @@ const ItemCard = styled.div<Partial<ItemProps>>`
   position: relative;
   max-height: 20rem;
   width: 89.4vw;
-  height: 50vh;
+  max-height: 50vh;
   margin: 0.2rem;
   border-radius: 0.4rem;
   background-color: ${({isSelected}) => isSelected 
