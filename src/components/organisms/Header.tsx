@@ -8,7 +8,7 @@ const HeaderWrapper = styled.div`
   display: grid;
   background-color: var(--pure-white);
   width: 100%;
-  z-index: 10;
+  z-index: 40;
   grid-template-columns: 2fr 1fr;
   height: var(--header-height-mobile);
   box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.03) 0 0 0 1px;

@@ -28,6 +28,7 @@ const IconWrapper = styled.div<IconProps>`
     width: ${({ width }) => width};
     height: ${({ height }) => height};
     stroke-width: ${({ strokeWidth }) => strokeWidth};
+    transform: rotateZ(${({ rotation }) => rotation}deg);
   }
 `
 
@@ -37,6 +38,7 @@ export type IconProps = {
   width?: string;
   height?: string;
   strokeWidth?: number;
+  rotation?: number;
 }
 
 export const Icon: React.FC<IconProps> = props =>
@@ -46,5 +48,6 @@ Icon.defaultProps = {
   color: 'var(--bg-color)',
   strokeWidth: 1.5,
   width: '20px',
-  height: '20px'
+  height: '20px',
+  rotation: 0
 }

@@ -25,13 +25,13 @@ const ItemCard = styled.div<Partial<ItemProps>>`
   display: flex;
   flex-direction: column;
   position: relative;
-  max-height: 20rem;
   width: 89.4vw;
+  ${({isSelected}) => isSelected && 'color: white;'}
   max-height: 50vh;
   margin: 0.2rem;
   border-radius: 0.4rem;
   background-color: ${({isSelected}) => isSelected 
-    ? () => rgba(cssVar('--primary'), 0.4) 
+    ? () => rgba(cssVar('--primary'), 1) 
     : 'var(--pure-white)'};
   box-shadow: ${({isSelected}) => isSelected 
     ? 'rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.1) 0 0 0 1px'
@@ -123,14 +123,16 @@ const ItemComplInfos = styled.div<Partial<ItemProps>>`
   }
 `
 
-const ItemImage = styled.div`
+const ItemImage = styled.div<Partial<ItemProps>>`
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 0.3rem;
   height: 12rem;
   width: 100%;
-  background: ${() => rgba(cssVar('--primary'), 0.6)};
+  background: ${({isSelected}) => () => isSelected 
+          ? rgba(cssVar('--pure-white'), 0.2)
+          : rgba(cssVar('--primary'), 0.4)};
 
   img {
     object-fit: cover;
@@ -163,7 +165,7 @@ export const Item: React.FC<ItemProps> = (
 
   return <ItemCard ref={reference as any} isSelected={isSelected}>
     <ItemTopBlock isSelected={isSelected}>
-      <ItemImage>
+      <ItemImage isSelected={isSelected}>
         <Image src={image} alt="item" fallbackIconSize={"40"} />
       </ItemImage>
       <ItemMainInfos>
