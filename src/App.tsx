@@ -1,15 +1,15 @@
 import React from 'react'
-import { Header } from "./organisms/Header"
-import styled from "styled-components"
-import { device } from "./theme/device"
-import { AppConfigurator } from "./organisms/AppConfigurator"
+import { Header } from './components/organisms/Header'
+import styled from 'styled-components'
+import { device } from './theme/device'
+import { AppConfigurator } from './components/organisms/AppConfigurator'
 
 const AppWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   font-family: 'Raleway', sans-serif;
-  background-color: #F8F9F9;
+  background-color: var(--bg-color);
   max-width: 100vw;
 
   h1, h2 {
@@ -25,14 +25,10 @@ const AppWrapper = styled.div`
   }
   
   a {
-    color: orange;
+    color: var(--primary);
     text-transform: uppercase;
     font-weight: bold;
     text-decoration: none;
-  }
-
-  p {
-    font-size: 1rem;
   }
 `;
 

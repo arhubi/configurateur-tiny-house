@@ -1,9 +1,9 @@
 import React from 'react'
-import styled from "styled-components";
-import { Icon, IconProps } from "./Icon"
+import styled from 'styled-components'
+import { Icon, IconProps } from './Icon'
 
 
-const ButtonWrapper = styled.button<Partial<ButtonProps>>`
+const ButtonWrapper = styled.button<Partial<ButtonProps> & {hasText: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -15,11 +15,11 @@ const ButtonWrapper = styled.button<Partial<ButtonProps>>`
   padding: 0.4rem 0.6rem;
   cursor: pointer;
   font-size: 1rem;
-  box-shadow: ${({outlined }) => !outlined ? 'rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.08) 0 0 0 1px' : 'none'};
+  box-shadow: ${({outlined }) => !outlined ? 'rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.03) 0 0 0 1px' : 'none'};
 
-  svg {
+  ${({hasText}) => hasText && `svg {
     margin-left: 0.4rem;
-  }
+  };`}
 `
 
 type ButtonProps = {
@@ -32,13 +32,13 @@ type ButtonProps = {
 }
 
 export const Button: React.FC<ButtonProps> = props =>
-  <ButtonWrapper {...props} onClick={props?.onClick}>
+  <ButtonWrapper {...props} onClick={props?.onClick} hasText={Boolean(props.text)}>
     {props.text}
     {props.icon && <Icon kind={props.icon} color={props.textColor} />}
   </ButtonWrapper>
 
 Button.defaultProps = {
-  bgColor: 'darkgray',
-  textColor: 'white',
+  bgColor: 'var(--pure-white)',
+  textColor: 'var(--text-color)',
   outlined: false
 }
