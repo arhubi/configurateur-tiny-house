@@ -8,7 +8,7 @@ import { device } from '../../theme/device'
 import { SummaryItem } from '../molecules/SummaryItem'
 import { groupBy } from '../../utils'
 import { ItemProps } from '../atoms/Item'
-import { Icon } from "../atoms/Icon";
+import { Icon } from '../atoms/Icon'
 
 export type SummaryProps = {};
 
@@ -59,6 +59,7 @@ const ItemsWrapper = styled.div`
     background: white;
     padding-bottom: 0.4rem;
     width: 100%;
+    z-index: 10;
   }
 `
 
@@ -88,7 +89,7 @@ export const Summary: React.FC<SummaryProps> = () => {
 
   const showSummary = isLaptop || summaryOpen
   return (
-    <SummaryWrapper isSummaryOpen={summaryOpen}>
+    <SummaryWrapper isSummaryOpen={summaryOpen} id="summary">
       {showSummary && <SummaryStart>
         <SummaryHeader>
           <h2>Vos sélections</h2>
@@ -102,7 +103,7 @@ export const Summary: React.FC<SummaryProps> = () => {
               <h3>{category} ({sortedItems[category].length})</h3>
               {sortedItems[category].map((item: ItemProps) => <SummaryItem {...item} />)}
             </>)}
-        {!selectedItems.length && <p>Sélectionnez des items pour compléter votre sélection.</p>}
+        {!selectedItems.length && <p>Sélectionnez des items pour démarrer votre sélection.</p>}
         </ItemsWrapper>
       </SummaryStart>}
       <div>

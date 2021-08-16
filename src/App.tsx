@@ -1,14 +1,19 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import Tour from 'reactour'
 import { Header } from './components/organisms/Header'
 import styled from 'styled-components'
 import { device } from './theme/device'
 import { AppConfigurator } from './components/organisms/AppConfigurator'
+import { IntroModal, ModalAction } from './components/molecules/IntroModal'
+import { steps } from './app-tour/config'
+import { useSelector } from 'react-redux'
+import { RootState } from './store'
+import { Button } from './components/atoms/Button'
 
 const AppWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: 'Raleway', sans-serif;
   background-color: var(--bg-color);
   max-width: 100vw;
 
@@ -45,17 +50,56 @@ const AppBody = styled.div`
   @media screen and ${device.laptop} {
     height: var(--body-height);
   }
-`;
+`
+
+const TourButton = styled(Button)`
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+`
 
 
 const App = () => {
-    return (
-        <AppWrapper>
-            <Header />
-            <AppBody>
-                <AppConfigurator />
-            </AppBody>
-        </AppWrapper>
+  const [isIntroModalOpen, setIsIntroModalOpen] = useState(false)
+  const [isTourOpen, setIsTourOpen] = useState(false)
+
+  const isConfiguratorLoaded = useSelector((state: RootState) => state.configurator.isLoaded)
+  const showIntroModal = useSelector((state: RootState) => state.configurator.showIntroModal)
+
+  useEffect(() => {
+    isConfiguratorLoaded && showIntroModal && setIsIntroModalOpen(true)
+  }, [isConfiguratorLoaded])
+
+  const handleModalAction = (action: ModalAction) => {
+    switch (action) {
+      case ModalAction.START_TOUR:
+        setIsIntroModalOpen(false)
+        setIsTourOpen(true)
+        break;
+      case ModalAction.CLOSE_MODAL:
+        setIsIntroModalOpen(false)
+        break;
+    }
+  }
+
+  return (
+    <>
+      <Tour
+        steps={steps}
+        isOpen={isTourOpen}
+        onRequestClose={() => setIsTourOpen(false)}
+        rounded={10}
+        accentColor="var(--primary)"
+      />
+      <AppWrapper>
+          <Header />
+          <AppBody>
+              <AppConfigurator />
+          </AppBody>
+        {isIntroModalOpen && <IntroModal onModalAction={(action) => handleModalAction(action)} />}
+      </AppWrapper>
+      <TourButton text="Besoin d'aide" icon="help" textColor="var(--primary)" bgColor="var(--pure-white)" onClick={() => setIsTourOpen(true)} />
+  </>
     );
 }
 

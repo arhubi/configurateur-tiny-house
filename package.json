@@ -20,6 +20,7 @@
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.4",
     "react-scripts": "4.0.3",
+    "reactour": "^1.18.6",
     "redux": "^4.1.0",
     "styled-components": "^5.3.0",
     "typescript": "^4.1.2",
@@ -48,5 +49,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/reactour": "^1.18.2"
   }
 }

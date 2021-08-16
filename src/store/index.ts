@@ -6,12 +6,20 @@ type State = {
   items: ItemProps[];
   steps: StepProps[];
   selectionByScroll: boolean;
+  configurator: {
+    isLoaded: boolean;
+    showIntroModal: boolean;
+  }
 }
 
 const initialState: State = {
   items: [],
   steps: [],
-  selectionByScroll: true
+  selectionByScroll: true,
+  configurator: {
+    isLoaded: false,
+    showIntroModal: false,
+  }
 };
 
 interface ItemsAction extends Action {
@@ -72,10 +80,27 @@ export function scrollSelectionReducer(scrollLockState = initialState.selectionB
   }
 }
 
+export function configuratorStateReducer(configuratorState = initialState.configurator, action: Action) {
+  switch (action.type) {
+    case 'configurator/set-loaded':
+      localStorage.getItem('monChat');
+      return { ...configuratorState, isLoaded: true }
+    case 'configurator/show-intro-modal':
+      const introDismissed = localStorage.getItem('hideIntro') === 'true'
+      return { ...configuratorState, showIntroModal: !introDismissed }
+    case 'configurator/hide-intro-modal':
+      localStorage.setItem('hideIntro', String(true))
+      return { ...configuratorState, showIntroModal: false }
+    default:
+      return configuratorState
+  }
+}
+
 const rootReducer = combineReducers(({
     items: itemsReducer,
     steps: stepsReducer,
     selectionByScroll: scrollSelectionReducer,
+    configurator: configuratorStateReducer,
   }
 ))
 

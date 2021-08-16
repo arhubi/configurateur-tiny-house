@@ -8,6 +8,7 @@ import { ReactComponent as Cottage } from '../../assets/icons/cottage.svg'
 import { ReactComponent as CameraOff } from '../../assets/icons/camera-off.svg'
 import { ReactComponent as ChevronRight } from '../../assets/icons/chevron-right.svg'
 import { ReactComponent as Link } from '../../assets/icons/link.svg'
+import { ReactComponent as Help } from '../../assets/icons/help.svg'
 
 const icons = {
   arrow: <Arrow />,
@@ -17,6 +18,7 @@ const icons = {
   'camera-off': <CameraOff />,
   'chevron-right': <ChevronRight />,
   link: <Link />,
+  help: <Help />,
 }
 
 const IconWrapper = styled.div<IconProps>`
