@@ -52,8 +52,10 @@ const AppBody = styled.div`
   }
 `
 
-const TourButton = styled(Button)`
+const QuickActions = styled.div`
+  display: flex;
   position: fixed;
+  gap: 0.4rem;
   bottom: 2rem;
   right: 2rem;
 `
@@ -97,7 +99,10 @@ const App = () => {
           </AppBody>
         {isConfiguratorLoaded && showIntroModal && <IntroModal onModalAction={(action) => handleModalAction(action)} />}
       </AppWrapper>
-      <TourButton text="Besoin d'aide" icon="help" textColor="var(--primary)" bgColor="var(--pure-white)" onClick={() => setIsTourOpen(true)} />
+      <QuickActions>
+        <Button text="Besoin d'aide" icon="help" textColor="var(--primary)" bgColor="var(--pure-white)" onClick={() => setIsTourOpen(true)} />
+        <Button icon="reset" textColor="orange" bgColor="var(--pure-white)" onClick={() => dispatch({ type: 'configurator/reset' })} />
+      </QuickActions>
   </>
     );
 }

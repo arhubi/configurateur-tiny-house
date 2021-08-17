@@ -2,7 +2,6 @@ import { Step, StepProps } from '../molecules/Step'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
-import { useMediaQuery } from '../../hooks/useMediaQuery'
 import { LoadingScreen } from '../molecules/LoadingScreen'
 import { RootState } from '../../store'
 import { device } from '../../theme/device'
@@ -35,28 +34,24 @@ type StepsProps = {
 }
 
 export const Steps: React.FC<StepsProps> = ({ steps, isLoading }) => {
-    const [enabledSteps, setEnabledSteps] = useState([steps?.[0]?.title] || [])
     const [visibleSteps, setVisibleSteps] = useState<number[]>([])
-    const [activeStep, setActiveStep] = useState<StepProps | undefined>(steps[0])
-
-    const isLaptop = useMediaQuery('laptop')
 
     const dispatch = useDispatch()
+
     const selectionByScroll = useSelector((state: RootState) => state.selectionByScroll)
+    const activeStep = useSelector((state: RootState) => state.steps.find((step: any) => step.isActive))
 
     useEffect(() => {
-        !isLoading && setEnabledSteps(enabledSteps => [...enabledSteps, steps?.[0]?.title])
+        !isLoading && dispatch({
+            type: 'steps/set-enabled',
+            payload: steps?.[0]
+        })
         // eslint-disable-next-line
     }, [isLoading])
 
     useEffect(() => {
         dispatch({type: 'scroll-selection/lock'})
-        dispatch({type: 'steps/set-active', payload: activeStep})
     }, [activeStep, dispatch])
-
-    useEffect(() => {
-        dispatch({type: 'steps/set-enabled-all', payload: enabledSteps})
-    }, [enabledSteps, dispatch])
 
     useEffect(() => {
         const firstVisibleIndex = isFinite(Math.min(...visibleSteps)) && Math.min(...visibleSteps)
@@ -67,8 +62,8 @@ export const Steps: React.FC<StepsProps> = ({ steps, isLoading }) => {
 
     const handleStepDone = (index: number) => {
         if (index + 1 < steps.length) {
-            setEnabledSteps((enabledSteps) => [...enabledSteps, steps[index + 1].title])
-            setActiveStep(steps[index + 1])
+            dispatch({ type: 'steps/set-enabled', payload: steps[index + 1]})
+            dispatch({ type: 'steps/set-active', payload: steps[index + 1]})
         }
     }
 
@@ -93,10 +88,7 @@ export const Steps: React.FC<StepsProps> = ({ steps, isLoading }) => {
                   onStepDone={() => handleStepDone(index)}
                   onVisibilityChange={(newVisibilityStatus) =>
                     handleVisibilityChange(index, newVisibilityStatus)}
-                  isEnabled={enabledSteps.includes(step.title)}
-                  showTitle={isLaptop}
-            />)
-        }
+            />)})
         {isLoading && <LoadingScreen />}
     </StepsWrapper>)
 }

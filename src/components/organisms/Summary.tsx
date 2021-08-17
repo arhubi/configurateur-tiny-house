@@ -81,7 +81,7 @@ const CloseIcon = styled(Icon)`
 export const Summary: React.FC<SummaryProps> = () => {
   const [summaryOpen, setSummaryOpen] = useState(false)
   const selectedItems = useSelector((state: RootState) => state.items)
-  const totalPrice = selectedItems.reduce((acc, item) => acc + item.price, 0)
+  const totalPrice = selectedItems.reduce((acc: number, item: any) => acc + item.price, 0)
 
   const sortedItems = groupBy(selectedItems, 'category')
 

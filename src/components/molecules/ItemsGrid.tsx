@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Item, ItemProps } from '../atoms/Item'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { device } from '../../theme/device'
+import { RootState } from '../../store'
 
 const ItemsGridWrapper = styled.div`
   display: flex;
@@ -34,6 +35,8 @@ export const ItemsGrid: React.FC<ItemsGridProps> = (props) => {
   const [selected, setSelected] = useState<number[]>([])
   const [visibleItems, setVisibleItems] = useState<number[]>([0])
   const dispatch = useDispatch()
+
+  const reset = useSelector((state: RootState) => state.configurator.isReset)
 
   const handleClick = (index: number): void => {
     const item = props.items[index]
@@ -73,6 +76,14 @@ export const ItemsGrid: React.FC<ItemsGridProps> = (props) => {
       : visibleItems.filter(item => item !== itemIndex))
     props?.onVisibleItemsChange?.(visibleItems)
   }
+
+
+  useEffect(() => {
+    console.log("items grid, RESET", reset)
+    if (reset) {
+      setSelected([])
+    }
+  }, [reset])
 
   return (<ItemsGridWrapper>
     {props.items.map((item, index) =>

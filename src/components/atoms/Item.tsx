@@ -54,8 +54,8 @@ const ItemCard = styled.div<Partial<ItemProps>>`
 const ItemTopBlock = styled.div<Partial<ItemProps>>`
   display: flex;
   position: relative;
-  margin: 0.3rem;
-  border-radius: 0.3rem;
+  margin: 0.4rem;
+  border-radius: 0.4rem;
   z-index: 0;
 `
 
@@ -100,9 +100,9 @@ const ItemComplInfos = styled.div<Partial<ItemProps>>`
   scroll-snap-type: y mandatory;
   overflow: scroll;
   transition: background-color 100ms ease-in;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.4rem;
   border-radius: 0 0 0.4rem 0.4rem;
-  padding: 0.2rem;
+  padding: 0.4rem;
   grid-auto-rows: minmax(min-content, max-content);
 
   > div {
@@ -129,7 +129,7 @@ const ItemImage = styled.div<Partial<ItemProps>>`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.3rem;
+  border-radius: 0.4rem;
   height: 12rem;
   width: 100%;
   background: ${({isSelected}) => () => isSelected 
@@ -140,7 +140,7 @@ const ItemImage = styled.div<Partial<ItemProps>>`
     object-fit: cover;
     height: 100%;
     width: 100%;
-    border-radius: 0.3rem;
+    border-radius: 0.4rem;
   }
 
   @media screen and ${device.laptop} {

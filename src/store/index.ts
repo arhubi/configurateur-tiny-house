@@ -1,4 +1,4 @@
-import { Action, combineReducers, createStore } from '@reduxjs/toolkit'
+import { Action, combineReducers, createStore, Reducer } from '@reduxjs/toolkit'
 import { ItemProps } from '../components/atoms/Item'
 import { StepProps } from '../components/molecules/Step'
 
@@ -9,6 +9,7 @@ type State = {
   configurator: {
     isLoaded: boolean;
     showIntroModal: boolean;
+    isReset: boolean;
   }
 }
 
@@ -19,6 +20,7 @@ const initialState: State = {
   configurator: {
     isLoaded: false,
     showIntroModal: !(localStorage.getItem('showIntro') && localStorage.getItem('showIntro') === "false") || false,
+    isReset: false
   }
 };
 
@@ -49,10 +51,15 @@ interface StepAction extends Action {
 
 export function stepsReducer(stepsState = initialState.steps, action: StepAction) {
   if (!action.type) return stepsState
+  const payloadType = typeof action.payload
+  const stepTitle = payloadType === 'string' ? action.payload : action.payload?.title || ''
 
   switch (action.type) {
     case 'steps/set-all':
       return action.payload
+    case 'steps/set-enabled':
+      if (payloadType === 'undefined') return stepsState
+      return stepsState.map(step => ({...step, isEnabled: step.title === stepTitle ? true : step.isEnabled }))
     case 'steps/set-enabled-all':
       const payload = action.payload as any
       return stepsState.map(step => {
@@ -60,9 +67,7 @@ export function stepsReducer(stepsState = initialState.steps, action: StepAction
         return {...step, isEnabled: payloadIndex > -1}
       })
     case 'steps/set-active':
-      const payloadType = typeof action.payload
       if (payloadType === 'undefined') return stepsState
-      const stepTitle = payloadType === 'string' ? action.payload : action.payload.title
       return stepsState.map(step => ({...step, isActive: step.title === stepTitle}))
     default:
       return stepsState
@@ -95,13 +100,39 @@ export function configuratorStateReducer(configuratorState = initialState.config
   }
 }
 
-const rootReducer = combineReducers(({
+const appReducer = combineReducers({
     items: itemsReducer,
     steps: stepsReducer,
     selectionByScroll: scrollSelectionReducer,
     configurator: configuratorStateReducer,
   }
-))
+)
+
+const rootReducer: Reducer = (state: RootState, action: Action) => {
+  if (action.type === 'configurator/reset') {
+    const { steps, configurator } = state
+    state = {
+      steps: steps.map((step: any, index: number) => ({ ...step, isActive: index === 0, isEnabled: index === 0})),
+      configurator: {
+        ...configurator,
+        isReset: true
+      }
+    }
+  }
+
+  if (state?.configurator.isReset) {
+    state = {
+      ...state,
+      configurator: {
+        ...state.configurator,
+        isReset: false
+      }
+    }
+  }
+  return appReducer(state, action);
+
+};
+
 
 const store = createStore(rootReducer)
 
