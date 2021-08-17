@@ -68,7 +68,7 @@ export const AppConfigurator: React.FC = () => {
 
   const isLaptop = useMediaQuery('laptop')
 
-  const [isLoading, setIsLoading] = useState(true)
+  const isLoaded = useSelector((state: RootState) => state.configurator.isLoaded)
   const steps: any = useSelector((state: RootState) => state.steps)
 
   useEffect(() => {
@@ -76,16 +76,16 @@ export const AppConfigurator: React.FC = () => {
       const {data} = await axios.get(`/blocks/${SECTION_ID}/children`)
       const stepsIds = data.results?.map((item: any) => item.id)
 
-      const {data: settingsData} = await axios.post(`/databases/${SETTINGS_ID}/query`)
+      const { data: settingsData } = await axios.post(`/databases/${SETTINGS_ID}/query`)
       const settings = settingsData.results.map((result: any) => mapSettingsResults(result))
 
       const steps: StepProps[] = await Promise.all(
         stepsIds.map(async (id: string, index: number) => {
-          const {data} = await axios.get(`/databases/${id}`)
+          const { data } = await axios.get(`/databases/${id}`)
           const title = data.title[0].plain_text
           const relatedSettings = settings.find((setting: any) => setting.title === title)
 
-          const {data: postsData} = await axios.post(`/databases/${id}/query`)
+          const { data: postsData } = await axios.post(`/databases/${id}/query`)
           const itemsCount = getValidItems(postsData.results)
 
           return {
@@ -99,7 +99,7 @@ export const AppConfigurator: React.FC = () => {
         })
       )
       dispatch({type: 'steps/set-all', payload: steps.filter((step: StepProps) => step.itemsCount > 0)})
-      setIsLoading(false)
+      dispatch({type: 'configurator/set-loaded'})
     })()
     // eslint-disable-next-line
   }, [])
@@ -110,10 +110,12 @@ export const AppConfigurator: React.FC = () => {
       <Configurator>
         <ConfiguratorMain>
           <StepsWrapper>
-            {isLaptop && <StepsInfo>
-              <h2>Choisissez les composants de votre tiny house</h2>
-            </StepsInfo>}
-            <Steps steps={steps} isLoading={isLoading}/>
+            {isLaptop &&
+              <StepsInfo>
+                <h2>Choisissez les composants de votre tiny house</h2>
+              </StepsInfo>
+            }
+            <Steps steps={steps} isLoading={!isLoaded}/>
           </StepsWrapper>
           <Summary/>
         </ConfiguratorMain>

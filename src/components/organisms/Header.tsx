@@ -3,6 +3,7 @@ import logo from '../../assets/logo-transparent.png'
 import styled from 'styled-components'
 import { device } from '../../theme/device'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
+import { Image } from '../atoms/Image'
 
 const HeaderWrapper = styled.div`
   display: grid;
@@ -11,7 +12,7 @@ const HeaderWrapper = styled.div`
   z-index: 40;
   grid-template-columns: 2fr 1fr;
   height: var(--header-height-mobile);
-  box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.03) 0 0 0 1px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.2) 0 0 0 1px;
   
   @media screen and ${device.laptop} {
     position: fixed;
@@ -112,9 +113,9 @@ export const Header: React.FC = () => {
   const isLaptop = useMediaQuery('laptop')
 
   return (<HeaderWrapper>
-    <LogoIntroWrapper>
+    <LogoIntroWrapper id="header">
       <LogoWrapper>
-        <img src={logo} className="app-logo" alt="logo"/>
+        <Image src={logo} className="app-logo" alt="logo"/>
         <div className="app-title">
           <h1>Le Configurateur</h1>
           {!isLaptop &&

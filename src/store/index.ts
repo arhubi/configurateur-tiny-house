@@ -1,4 +1,4 @@
-import { Action, combineReducers, createStore } from '@reduxjs/toolkit'
+import { Action, combineReducers, createStore, Reducer } from '@reduxjs/toolkit'
 import { ItemProps } from '../components/atoms/Item'
 import { StepProps } from '../components/molecules/Step'
 
@@ -6,12 +6,22 @@ type State = {
   items: ItemProps[];
   steps: StepProps[];
   selectionByScroll: boolean;
+  configurator: {
+    isLoaded: boolean;
+    showIntroModal: boolean;
+    isReset: boolean;
+  }
 }
 
 const initialState: State = {
   items: [],
   steps: [],
-  selectionByScroll: true
+  selectionByScroll: true,
+  configurator: {
+    isLoaded: false,
+    showIntroModal: !(localStorage.getItem('showIntro') && localStorage.getItem('showIntro') === "false") || false,
+    isReset: false
+  }
 };
 
 interface ItemsAction extends Action {
@@ -41,10 +51,15 @@ interface StepAction extends Action {
 
 export function stepsReducer(stepsState = initialState.steps, action: StepAction) {
   if (!action.type) return stepsState
+  const payloadType = typeof action.payload
+  const stepTitle = payloadType === 'string' ? action.payload : action.payload?.title || ''
 
   switch (action.type) {
     case 'steps/set-all':
       return action.payload
+    case 'steps/set-enabled':
+      if (payloadType === 'undefined') return stepsState
+      return stepsState.map(step => ({...step, isEnabled: step.title === stepTitle ? true : step.isEnabled }))
     case 'steps/set-enabled-all':
       const payload = action.payload as any
       return stepsState.map(step => {
@@ -52,9 +67,7 @@ export function stepsReducer(stepsState = initialState.steps, action: StepAction
         return {...step, isEnabled: payloadIndex > -1}
       })
     case 'steps/set-active':
-      const payloadType = typeof action.payload
       if (payloadType === 'undefined') return stepsState
-      const stepTitle = payloadType === 'string' ? action.payload : action.payload.title
       return stepsState.map(step => ({...step, isActive: step.title === stepTitle}))
     default:
       return stepsState
@@ -72,15 +85,84 @@ export function scrollSelectionReducer(scrollLockState = initialState.selectionB
   }
 }
 
-const rootReducer = combineReducers(({
+export function configuratorStateReducer(configuratorState = initialState.configurator, action: Action) {
+  switch (action.type) {
+    case 'configurator/set-loaded':
+      return { ...configuratorState, isLoaded: true }
+    case 'configurator/show-intro-modal':
+      localStorage.setItem('showIntro', 'true')
+      return { ...configuratorState, showIntroModal: true }
+    case 'configurator/hide-intro-modal':
+      localStorage.setItem('showIntro', 'false')
+      return { ...configuratorState, showIntroModal: false }
+    default:
+      return configuratorState
+  }
+}
+
+const appReducer = combineReducers({
     items: itemsReducer,
     steps: stepsReducer,
     selectionByScroll: scrollSelectionReducer,
+    configurator: configuratorStateReducer,
   }
-))
+)
 
-const store = createStore(rootReducer)
+const rootReducer: Reducer = (state: RootState, action: Action) => {
+  if (action.type === 'configurator/reset') {
+    const { steps, configurator } = state
+    state = {
+      steps: steps.map((step: any, index: number) => ({ ...step, isActive: index === 0, isEnabled: index === 0})),
+      configurator: {
+        ...configurator,
+        isReset: true
+      }
+    }
+  }
+
+  if (state?.configurator?.isReset) {
+    state = {
+      ...state,
+      configurator: {
+        ...state.configurator,
+        isReset: false
+      }
+    }
+  }
+  return appReducer(state, action);
+
+};
+export const saveState = (state: RootState) => {
+  try {
+    const serializedState = JSON.stringify(state);
+    localStorage.setItem('state', serializedState);
+  } catch {
+    // ignore write errors
+  }
+}
+
+export const loadState = () => {
+  try {
+    const serializedState = localStorage.getItem('state')
+    if (serializedState === null) {
+      return undefined;
+    }
+    return JSON.parse(serializedState);
+  } catch (err) {
+    return undefined;
+  }
+}
+
+const persistedState = loadState()
+const store = createStore(rootReducer, persistedState)
 
 export default store;
 export type RootState = ReturnType<typeof store.getState>
+
+store.subscribe(() => {
+  saveState({
+    items: store.getState().items,
+    steps: store.getState().steps,
+  });
+})
 

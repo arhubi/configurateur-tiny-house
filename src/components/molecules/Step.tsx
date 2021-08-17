@@ -10,6 +10,8 @@ import { ItemsGrid } from './ItemsGrid'
 import { Button } from '../atoms/Button'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
 import { Dots } from './Dots'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../store'
 
 const StepWrapper = styled.div<Partial<StepProps>>`
   display: flex;
@@ -98,7 +100,6 @@ export type StepProps = {
   isEnabled?: boolean;
   required?: boolean;
   multiple?: boolean;
-  showTitle?: boolean;
   onStepDone?: () => void;
   onVisibilityChange?: (status: boolean) => void;
 };
@@ -112,13 +113,14 @@ export const Step: React.FC<StepProps> = (
     onStepDone,
     onVisibilityChange = () => {},
     multiple = false,
-    showTitle = true
   }) => {
   const [items, setItems] = useState<ItemProps[]>([])
   const [isValidated, setIsValidated] = useState(false)
   const [selectedItems, setSelectedItems] = useState<number[]>([])
   const [visibleItems, setVisibleItems] = useState<number[]>([0])
   const reference = useRef()
+
+  const reset = useSelector((state: RootState) => state.configurator.isReset)
 
   // TODO : improve by using banner height
   const isLaptop = useMediaQuery('laptop')
@@ -159,12 +161,19 @@ export const Step: React.FC<StepProps> = (
     // eslint-disable-next-line
   }, [])
 
+  useEffect(() => {
+    if (reset) {
+      setIsValidated(false)
+      setSelectedItems([])
+    }
+  }, [reset])
+
   return (
     <StepWrapper isEnabled={isEnabled} onClickCapture={e => handleClick(e)} ref={reference as any}>
       <StepDescription>
-        {showTitle && <h2>{title}</h2>}
         {isLaptop &&
         <>
+          <h2>{title}</h2>
           <StepProperties>
             {required ? <span>Requis</span> : <span>Optionnel</span>}
             {multiple && <span>Choix multiples</span>}

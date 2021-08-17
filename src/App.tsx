@@ -1,14 +1,19 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import Tour from 'reactour'
 import { Header } from './components/organisms/Header'
 import styled from 'styled-components'
 import { device } from './theme/device'
 import { AppConfigurator } from './components/organisms/AppConfigurator'
+import { IntroModal, ModalAction } from './components/molecules/IntroModal'
+import { steps } from './app-tour/config'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from './store'
+import { Button } from './components/atoms/Button'
 
 const AppWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: 'Raleway', sans-serif;
   background-color: var(--bg-color);
   max-width: 100vw;
 
@@ -45,17 +50,60 @@ const AppBody = styled.div`
   @media screen and ${device.laptop} {
     height: var(--body-height);
   }
-`;
+`
 
+const QuickActions = styled.div`
+  display: flex;
+  position: fixed;
+  gap: 0.4rem;
+  bottom: 2rem;
+  right: 2rem;
+`
 
 const App = () => {
-    return (
-        <AppWrapper>
-            <Header />
-            <AppBody>
-                <AppConfigurator />
-            </AppBody>
-        </AppWrapper>
+  const [isTourOpen, setIsTourOpen] = useState(false)
+
+  const isConfiguratorLoaded = useSelector((state: RootState) => state.configurator.isLoaded)
+  const showIntroModal = useSelector((state: RootState) => state.configurator.showIntroModal)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    isConfiguratorLoaded && showIntroModal && dispatch({ type: 'configurator/is-loaded'})
+  }, [isConfiguratorLoaded, showIntroModal])
+
+  const handleModalAction = (action: ModalAction) => {
+    switch (action) {
+      case ModalAction.START_TOUR:
+        dispatch({ type: 'configurator/hide-intro-modal' })
+        setIsTourOpen(true)
+        break;
+      case ModalAction.CLOSE_MODAL:
+        dispatch({ type: 'configurator/hide-intro-modal' })
+        break;
+    }
+  }
+
+  return (
+    <>
+      <Tour
+        steps={steps}
+        isOpen={isTourOpen}
+        onRequestClose={() => setIsTourOpen(false)}
+        rounded={10}
+        accentColor="var(--primary)"
+      />
+      <AppWrapper>
+          <Header />
+          <AppBody>
+              <AppConfigurator />
+          </AppBody>
+        {isConfiguratorLoaded && showIntroModal && <IntroModal onModalAction={(action) => handleModalAction(action)} />}
+      </AppWrapper>
+      <QuickActions>
+        <Button text="Besoin d'aide" icon="help" textColor="var(--primary)" bgColor="var(--pure-white)" onClick={() => setIsTourOpen(true)} />
+        <Button icon="reset" textColor="orange" bgColor="var(--pure-white)" onClick={() => dispatch({ type: 'configurator/reset' })} />
+      </QuickActions>
+  </>
     );
 }
 

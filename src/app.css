@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap');
 
 :root {
-  --header-height: 8rem;
+  --header-height: 7rem;
   --header-height-mobile: 4rem;
   --configurator-banner-height: 2rem;
   --configurator-banner-height-mobile: 2.5rem;
@@ -17,6 +17,7 @@ body {
   margin: 0;
   color: var(--text-color);
   background: var(--bg-color);
+  font-family: 'Raleway', sans-serif;
 
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -28,4 +29,13 @@ body {
 
 p {
   font-size: 1rem;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
