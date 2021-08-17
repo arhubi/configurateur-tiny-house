@@ -18,7 +18,7 @@ const initialState: State = {
   selectionByScroll: true,
   configurator: {
     isLoaded: false,
-    showIntroModal: false,
+    showIntroModal: !(localStorage.getItem('showIntro') && localStorage.getItem('showIntro') === "false") || false,
   }
 };
 
@@ -83,13 +83,12 @@ export function scrollSelectionReducer(scrollLockState = initialState.selectionB
 export function configuratorStateReducer(configuratorState = initialState.configurator, action: Action) {
   switch (action.type) {
     case 'configurator/set-loaded':
-      localStorage.getItem('monChat');
       return { ...configuratorState, isLoaded: true }
     case 'configurator/show-intro-modal':
-      const introDismissed = localStorage.getItem('hideIntro') === 'true'
-      return { ...configuratorState, showIntroModal: !introDismissed }
+      localStorage.setItem('showIntro', 'true')
+      return { ...configuratorState, showIntroModal: true }
     case 'configurator/hide-intro-modal':
-      localStorage.setItem('hideIntro', String(true))
+      localStorage.setItem('showIntro', 'false')
       return { ...configuratorState, showIntroModal: false }
     default:
       return configuratorState

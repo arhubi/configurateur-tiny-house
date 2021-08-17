@@ -68,7 +68,7 @@ export const AppConfigurator: React.FC = () => {
 
   const isLaptop = useMediaQuery('laptop')
 
-  const [isLoading, setIsLoading] = useState(true)
+  const isLoaded = useSelector((state: RootState) => state.configurator.isLoaded)
   const steps: any = useSelector((state: RootState) => state.steps)
 
   useEffect(() => {
@@ -100,7 +100,6 @@ export const AppConfigurator: React.FC = () => {
       )
       dispatch({type: 'steps/set-all', payload: steps.filter((step: StepProps) => step.itemsCount > 0)})
       dispatch({type: 'configurator/set-loaded'})
-      setIsLoading(false)
     })()
     // eslint-disable-next-line
   }, [])
@@ -116,7 +115,7 @@ export const AppConfigurator: React.FC = () => {
                 <h2>Choisissez les composants de votre tiny house</h2>
               </StepsInfo>
             }
-            <Steps steps={steps} isLoading={isLoading}/>
+            <Steps steps={steps} isLoading={!isLoaded}/>
           </StepsWrapper>
           <Summary/>
         </ConfiguratorMain>
