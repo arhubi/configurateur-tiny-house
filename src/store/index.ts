@@ -120,7 +120,7 @@ const rootReducer: Reducer = (state: RootState, action: Action) => {
     }
   }
 
-  if (state?.configurator.isReset) {
+  if (state?.configurator?.isReset) {
     state = {
       ...state,
       configurator: {
@@ -132,10 +132,37 @@ const rootReducer: Reducer = (state: RootState, action: Action) => {
   return appReducer(state, action);
 
 };
+export const saveState = (state: RootState) => {
+  try {
+    const serializedState = JSON.stringify(state);
+    localStorage.setItem('state', serializedState);
+  } catch {
+    // ignore write errors
+  }
+}
 
+export const loadState = () => {
+  try {
+    const serializedState = localStorage.getItem('state')
+    if (serializedState === null) {
+      return undefined;
+    }
+    return JSON.parse(serializedState);
+  } catch (err) {
+    return undefined;
+  }
+}
 
-const store = createStore(rootReducer)
+const persistedState = loadState()
+const store = createStore(rootReducer, persistedState)
 
 export default store;
 export type RootState = ReturnType<typeof store.getState>
+
+store.subscribe(() => {
+  saveState({
+    items: store.getState().items,
+    steps: store.getState().steps,
+  });
+})
 

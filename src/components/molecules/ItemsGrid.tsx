@@ -79,7 +79,6 @@ export const ItemsGrid: React.FC<ItemsGridProps> = (props) => {
 
 
   useEffect(() => {
-    console.log("items grid, RESET", reset)
     if (reset) {
       setSelected([])
     }
