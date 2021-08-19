@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import styled from 'styled-components'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
-import { getValidItems, mapSettingsResults } from '../../utils/notion'
+import { getValidItems, isStepActive, isStepEnabled, mapSettingsResults } from '../../utils/notion'
 import { device } from '../../theme/device'
 import { RootState } from '../../store'
 import { StepProps } from '../molecules/Step'
@@ -69,7 +69,7 @@ export const AppConfigurator: React.FC = () => {
   const isLaptop = useMediaQuery('laptop')
 
   const isLoaded = useSelector((state: RootState) => state.configurator.isLoaded)
-  const steps: any = useSelector((state: RootState) => state.steps)
+  const storeSteps: any = useSelector((state: RootState) => state.steps)
 
   useEffect(() => {
     (async () => {
@@ -92,8 +92,8 @@ export const AppConfigurator: React.FC = () => {
             title,
             itemsCount,
             notionDbId: id,
-            isActive: index === 0,
-            isEnabled: index === 0,
+            isActive: storeSteps.length ? isStepActive(storeSteps, title) : index === 0,
+            isEnabled: storeSteps.length ? isStepEnabled(storeSteps, title) : index === 0,
             ...relatedSettings
           }
         })
@@ -115,7 +115,7 @@ export const AppConfigurator: React.FC = () => {
                 <h2>Choisissez les composants de votre tiny house</h2>
               </StepsInfo>
             }
-            <Steps steps={steps} isLoading={!isLoaded}/>
+            <Steps steps={storeSteps} isLoading={!isLoaded}/>
           </StepsWrapper>
           <Summary/>
         </ConfiguratorMain>

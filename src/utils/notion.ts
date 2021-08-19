@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { ItemProps } from '../components/atoms/Item'
 import { isValidUrl } from './index'
+import { StepProps } from "../components/molecules/Step";
 
 const propsMapping = {
     name: 'Nom',
@@ -42,4 +43,18 @@ const getDetails = (item: any, properties: any[]) => {
         name: detail,
         value: item?.properties?.[detail]?.rich_text?.[0]?.plain_text || 'N/A'
     }))
+}
+
+export const isStepActive = (steps: StepProps[], title: string) => {
+    const matchingStep = steps.find(step => step.title === title)
+    return matchingStep
+      ? matchingStep.isActive
+      : false
+}
+
+export const isStepEnabled = (steps: StepProps[], title: string) => {
+    const matchingStep = steps.find(step => step.title === title)
+    return matchingStep
+      ? matchingStep.isEnabled
+      : false
 }

@@ -36,6 +36,18 @@ export const ItemsGrid: React.FC<ItemsGridProps> = (props) => {
   const [visibleItems, setVisibleItems] = useState<number[]>([0])
   const dispatch = useDispatch()
 
+  const storeItems: any = useSelector((state: RootState) => state.items)
+
+  useEffect(() => {
+    const defaultSelected = props?.items
+      .map((item, index) => storeItems.find((storeItem: any) =>
+        storeItem.name === item.name && storeItem.category === item.category) && index
+      )
+      .filter(item => item !== undefined)
+    setSelected(defaultSelected)
+    // eslint-disable-next-line
+  }, [])
+
   const reset = useSelector((state: RootState) => state.configurator.isReset)
 
   const handleClick = (index: number): void => {
@@ -76,7 +88,6 @@ export const ItemsGrid: React.FC<ItemsGridProps> = (props) => {
       : visibleItems.filter(item => item !== itemIndex))
     props?.onVisibleItemsChange?.(visibleItems)
   }
-
 
   useEffect(() => {
     if (reset) {
