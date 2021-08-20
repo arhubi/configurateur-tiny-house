@@ -69,6 +69,7 @@ const App = () => {
 
   useEffect(() => {
     isConfiguratorLoaded && showIntroModal && dispatch({ type: 'configurator/is-loaded'})
+    // eslint-disable-next-line
   }, [isConfiguratorLoaded, showIntroModal])
 
   const handleModalAction = (action: ModalAction) => {
