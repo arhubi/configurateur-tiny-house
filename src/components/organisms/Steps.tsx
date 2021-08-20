@@ -55,7 +55,7 @@ export const Steps: React.FC<StepsProps> = ({ steps, isLoading }) => {
 
     useEffect(() => {
         const firstVisibleIndex = isFinite(Math.min(...visibleSteps)) && Math.min(...visibleSteps)
-        if (!selectionByScroll && firstVisibleIndex && steps[firstVisibleIndex] === steps.find(step => step.isActive)) {
+        if (!selectionByScroll && firstVisibleIndex > - 1 && steps[firstVisibleIndex || 0] === activeStep) {
             dispatch({type: 'scroll-selection/unlock'})
         }
     }, [selectionByScroll, steps, activeStep, visibleSteps, dispatch])
@@ -74,10 +74,12 @@ export const Steps: React.FC<StepsProps> = ({ steps, isLoading }) => {
     }
 
     const handleScroll = () => {
-        if (!selectionByScroll) return
-        const activeStepIndex = Math.min(...visibleSteps)
-        if (activeStepIndex > -1 && steps[activeStepIndex]?.isEnabled) {
-            dispatch({type: 'steps/set-active', payload: steps[activeStepIndex]})
+        const firstVisibleIndex = isFinite(Math.min(...visibleSteps)) ? Math.min(...visibleSteps) : 0
+        if (!selectionByScroll) {
+            return
+        }
+        if (firstVisibleIndex > -1 && steps[firstVisibleIndex]?.isEnabled && activeStep !== steps[firstVisibleIndex]) {
+            dispatch({type: 'steps/set-active', payload: steps[firstVisibleIndex]})
         }
     }
 
