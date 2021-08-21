@@ -26,6 +26,7 @@ const SummaryWrapper = styled.div<{isSummaryOpen: boolean}>`
   border-radius: 1rem 1rem 0 0;
   box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.2) 0 0 0 1px;
   z-index: ${({isSummaryOpen}) => isSummaryOpen ? 30 : 10};
+  padding-bottom: env(safe-area-inset-bottom);
 
   @media screen and ${device.laptop} {
     position: relative;

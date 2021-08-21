@@ -9,6 +9,7 @@ import { steps } from './app-tour/config'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from './store'
 import { Button } from './components/atoms/Button'
+import { useMediaQuery } from './hooks/useMediaQuery'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -44,7 +45,6 @@ const AppBody = styled.div`
   align-items: center;
   justify-content: space-between;
   text-align: center;
-  height: var(--body-height-mobile);
   width: 100%;
   
   @media screen and ${device.laptop} {
@@ -54,10 +54,18 @@ const AppBody = styled.div`
 
 const QuickActions = styled.div`
   display: flex;
+  flex-direction: column;
   position: fixed;
   gap: 0.4rem;
-  bottom: 2rem;
-  right: 2rem;
+  bottom: calc(1rem + env(safe-area-inset-bottom));
+  right: 1rem;
+  z-index: 10;
+
+  @media screen and ${device.laptop} {
+    flex-direction: row;
+    bottom: 2rem;
+    right: 2rem; 
+  }
 `
 
 const App = () => {
@@ -66,6 +74,8 @@ const App = () => {
   const isConfiguratorLoaded = useSelector((state: RootState) => state.configurator.isLoaded)
   const showIntroModal = useSelector((state: RootState) => state.configurator.showIntroModal)
   const dispatch = useDispatch()
+
+  const isLaptop = useMediaQuery('laptop')
 
   useEffect(() => {
     isConfiguratorLoaded && showIntroModal && dispatch({ type: 'configurator/is-loaded'})
@@ -101,7 +111,7 @@ const App = () => {
         {isConfiguratorLoaded && showIntroModal && <IntroModal onModalAction={(action) => handleModalAction(action)} />}
       </AppWrapper>
       <QuickActions>
-        <Button text="Besoin d'aide" icon="help" textColor="var(--primary)" bgColor="var(--pure-white)" onClick={() => setIsTourOpen(true)} />
+        <Button text={isLaptop ? "Besoin d'aide" : undefined } icon="help" textColor="var(--primary)" bgColor="var(--pure-white)" onClick={() => setIsTourOpen(true)} />
         <Button icon="reset" textColor="orange" bgColor="var(--pure-white)" onClick={() => dispatch({ type: 'configurator/reset' })} />
       </QuickActions>
   </>

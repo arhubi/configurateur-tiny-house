@@ -42,7 +42,7 @@ const StepWrapper = styled.div<Partial<StepProps>>`
 const ActionsWrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   margin: 1rem 0.2rem 0;
 
   @media screen and ${device.laptop} {

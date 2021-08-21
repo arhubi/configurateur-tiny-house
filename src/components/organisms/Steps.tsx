@@ -14,7 +14,7 @@ const StepsWrapper = styled.div<Partial<StepProps>>`
     overflow: scroll;
     scroll-behavior: smooth;
     width: 90vw;
-    height: calc(90vh - var(--header-height-mobile) - var(--configurator-banner-height-mobile));
+    height: calc(90vh - var(--header-height-mobile) - var(--configurator-banner-height-mobile) - env(safe-area-inset-bottom));
     
     > div:nth-last-child(1) {
         margin-bottom: calc(40rem);

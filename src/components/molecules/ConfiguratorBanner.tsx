@@ -16,7 +16,7 @@ type ArrowProps = {
 const ConfiguratorBannerWrapper = styled.div<ArrowProps>`
   display: flex;
   position: fixed;
-  bottom: 6rem;
+  bottom: calc(6rem + env(safe-area-inset-bottom));
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
