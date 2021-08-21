@@ -200,6 +200,7 @@ export const Step: React.FC<StepProps> = (
         onSelected={handleSelectedItems}
         onVisibleItemsChange={handleVisibleItemsChange}
         required={isRequired}
+        validated={isValidated}
         />
       }
       {!isLaptop &&

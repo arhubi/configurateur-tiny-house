@@ -29,8 +29,9 @@ type ItemsGridProps = {
   category: string;
   required: boolean;
   multiple: boolean;
+  validated: boolean;
 };
-export const ItemsGrid: React.FC<ItemsGridProps> = ({ required, ...props }) => {
+export const ItemsGrid: React.FC<ItemsGridProps> = ({ required, validated, ...props }) => {
   const [selectedItems, setSelectedItems] = useState<number[]>([])
   const [visibleItems, setVisibleItems] = useState<number[]>([0])
   const dispatch = useDispatch()
@@ -69,7 +70,7 @@ export const ItemsGrid: React.FC<ItemsGridProps> = ({ required, ...props }) => {
         props.onValidation?.();
       }
     } else {
-      if (!required || (required && selectedItems.length > 1)) {
+      if (!required || (required && (!validated || selectedItems.length > 1))) {
         setSelectedItems(selected => selected.filter(_index => _index !== index))
         props?.onSelected?.(selectedItems.filter(_index => _index !== index))
         dispatch({type: 'items/remove', payload: item})
