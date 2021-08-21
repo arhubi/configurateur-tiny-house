@@ -26,13 +26,12 @@ type ItemsGridProps = {
   onValidation?: () => void;
   onSelected?: (selectedItems: number[]) => void;
   onVisibleItemsChange?: (visibleItems: number[]) => void;
-  isValidated?: boolean;
   category: string;
   required: boolean;
   multiple: boolean;
 };
-export const ItemsGrid: React.FC<ItemsGridProps> = (props) => {
-  const [selected, setSelected] = useState<number[]>([])
+export const ItemsGrid: React.FC<ItemsGridProps> = ({ required, ...props }) => {
+  const [selectedItems, setSelectedItems] = useState<number[]>([])
   const [visibleItems, setVisibleItems] = useState<number[]>([0])
   const dispatch = useDispatch()
 
@@ -44,7 +43,7 @@ export const ItemsGrid: React.FC<ItemsGridProps> = (props) => {
         storeItem.name === item.name && storeItem.category === item.category) && index
       )
       .filter(item => item !== undefined)
-    setSelected(defaultSelected)
+    setSelectedItems(defaultSelected)
     // eslint-disable-next-line
   }, [])
 
@@ -53,30 +52,26 @@ export const ItemsGrid: React.FC<ItemsGridProps> = (props) => {
   const handleClick = (index: number): void => {
     const item = props.items[index]
 
-    if (index > props.items.length) {
-      selected.forEach(_index => dispatch({type: 'items/remove', payload: props.items[_index]}))
-      setSelected([props.items.length + 1])
-      props?.onSelected?.([props.items.length + 1])
-      !props.multiple && props.onValidation?.()
-    } else if (!selected.includes(index)) {
-      setSelected(selected => selected.filter(index => index !== (props.items.length + 1)))
+    if (!selectedItems.includes(index)) {
       if (item) {
+        dispatch({type: 'items/add', payload: item})
         if (props.multiple) {
-          dispatch({type: 'items/add', payload: item})
-          setSelected(selected => [...selected, index])
-          props?.onSelected?.([...selected, index])
+          setSelectedItems(selected => [...selected, index])
+          props?.onSelected?.([...selectedItems, index])
         } else {
-          selected.length && dispatch({type: 'items/remove', payload: props.items[selected[0]]})
-          dispatch({type: 'items/add', payload: item})
-          setSelected([index])
+          selectedItems.length && dispatch({
+            type: 'items/remove',
+            payload: selectedItems.map((itemIndex: number) => props.items[itemIndex])
+          })
+          setSelectedItems([index])
           props?.onSelected?.([index])
-          props.onValidation?.();
         }
+        props.onValidation?.();
       }
     } else {
-      if (!props.required || (props.required && selected.length > 1)) {
-        setSelected(selected => selected.filter(_index => _index !== index))
-        props?.onSelected?.(selected.filter(_index => _index !== index))
+      if (!required || (required && selectedItems.length > 1)) {
+        setSelectedItems(selected => selected.filter(_index => _index !== index))
+        props?.onSelected?.(selectedItems.filter(_index => _index !== index))
         dispatch({type: 'items/remove', payload: item})
       }
     }
@@ -91,14 +86,14 @@ export const ItemsGrid: React.FC<ItemsGridProps> = (props) => {
 
   useEffect(() => {
     if (reset) {
-      setSelected([])
+      setSelectedItems([])
     }
   }, [reset])
 
   return (<ItemsGridWrapper>
     {props.items.map((item, index) =>
       <div key={index} onClick={() => handleClick(index)}>
-        <Item {...item} isSelected={selected.includes(index)} onVisibilityChange={(newVisibilityStatus) =>
+        <Item {...item} isSelected={selectedItems.includes(index)} onVisibilityChange={(newVisibilityStatus) =>
           handleVisibilityChange(index, newVisibilityStatus)}/>
       </div>
     )}

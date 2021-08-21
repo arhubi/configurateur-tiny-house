@@ -72,6 +72,9 @@ export function stepsReducer(stepsState = initialState.steps, action: StepAction
     case 'steps/set-active':
       if (payloadType === 'undefined') return stepsState
       return stepsState.map(step => ({...step, isActive: step.title === stepTitle}))
+    case 'steps/set-validated':
+      if (payloadType === 'undefined') return stepsState
+      return stepsState.map(step => ({...step, isValidated: step.title === stepTitle ? true : step.isValidated }))
     default:
       return stepsState
   }
@@ -112,10 +115,16 @@ const appReducer = combineReducers({
 )
 
 const rootReducer: Reducer = (state: RootState, action: Action) => {
+  console.log(action.type)
   if (action.type === 'configurator/reset') {
     const { steps, configurator } = state
     state = {
-      steps: steps.map((step: any, index: number) => ({ ...step, isActive: index === 0, isEnabled: index === 0})),
+      steps: steps.map((step: any, index: number) => ({
+        ...step,
+        isActive: index === 0,
+        isEnabled: index === 0,
+        isValidated: false,
+      })),
       configurator: {
         ...configurator,
         isReset: true
@@ -130,6 +139,7 @@ const rootReducer: Reducer = (state: RootState, action: Action) => {
       }
     }
   }
+  localStorage.removeItem('state')
   return appReducer(state, action);
 
 };

@@ -10,8 +10,6 @@ import { groupBy } from '../../utils'
 import { ItemProps } from '../atoms/Item'
 import { Icon } from '../atoms/Icon'
 
-export type SummaryProps = {};
-
 const SummaryWrapper = styled.div<{isSummaryOpen: boolean}>`
   position: fixed;
   width: 100vw;
@@ -78,7 +76,7 @@ const CloseIcon = styled(Icon)`
   right: 0;
 `
 
-export const Summary: React.FC<SummaryProps> = () => {
+export const Summary: React.FC = () => {
   const [summaryOpen, setSummaryOpen] = useState(false)
   const selectedItems = useSelector((state: RootState) => state.items)
   const totalPrice = selectedItems.reduce((acc: number, item: any) => acc + item.price, 0)
@@ -99,10 +97,10 @@ export const Summary: React.FC<SummaryProps> = () => {
         </SummaryHeader>
         <ItemsWrapper>
           {selectedItems.length > 0 && Object.keys(sortedItems).map(category =>
-            <>
+            <React.Fragment key={category}>
               <h3>{category} ({sortedItems[category].length})</h3>
-              {sortedItems[category].map((item: ItemProps) => <SummaryItem {...item} />)}
-            </>)}
+              {sortedItems[category].map((item: ItemProps) => <SummaryItem key={item.name} {...item} />)}
+            </React.Fragment>)}
         {!selectedItems.length && <p>Sélectionnez des items pour démarrer votre sélection.</p>}
         </ItemsWrapper>
       </SummaryStart>}

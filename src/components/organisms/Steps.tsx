@@ -74,11 +74,13 @@ export const Steps: React.FC<StepsProps> = ({ steps, isLoading }) => {
     }
 
     const handleScroll = () => {
-        const firstVisibleIndex = isFinite(Math.min(...visibleSteps)) ? Math.min(...visibleSteps) : 0
-        if (!selectionByScroll) {
-            return
-        }
-        if (firstVisibleIndex > -1 && steps[firstVisibleIndex]?.isEnabled && activeStep !== steps[firstVisibleIndex]) {
+        const firstVisibleIndex = isFinite(Math.min(...visibleSteps)) && Math.min(...visibleSteps)
+        if (!selectionByScroll) return
+
+        if (firstVisibleIndex !== false
+          && firstVisibleIndex > -1
+          && steps[firstVisibleIndex]?.isEnabled
+          && activeStep !== steps[firstVisibleIndex]) {
             dispatch({type: 'steps/set-active', payload: steps[firstVisibleIndex]})
         }
     }

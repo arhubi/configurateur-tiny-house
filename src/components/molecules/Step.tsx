@@ -10,7 +10,7 @@ import { ItemsGrid } from './ItemsGrid'
 import { Button } from '../atoms/Button'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
 import { Dots } from './Dots'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store'
 
 const StepWrapper = styled.div<Partial<StepProps>>`
@@ -91,15 +91,15 @@ const DotsWrapper = styled.div`
   text-align: center;
 `
 
-
 export type StepProps = {
   title: string;
   notionDbId: string;
   itemsCount: number;
   isActive?: boolean;
   isEnabled?: boolean;
-  required?: boolean;
-  multiple?: boolean;
+  isValidated?: boolean;
+  isRequired?: boolean;
+  isMultiple?: boolean;
   onStepDone?: () => void;
   onVisibilityChange?: (status: boolean) => void;
 };
@@ -109,16 +109,19 @@ export const Step: React.FC<StepProps> = (
     notionDbId,
     isEnabled = false,
     isActive = false,
-    required = true,
+    isValidated= false,
+    isRequired = true,
+    isMultiple = false,
     onStepDone,
     onVisibilityChange = () => {},
-    multiple = false,
   }) => {
   const [items, setItems] = useState<ItemProps[]>([])
-  const [isValidated, setIsValidated] = useState(false)
   const [selectedItems, setSelectedItems] = useState<number[]>([])
-  const [visibleItems, setVisibleItems] = useState<number[]>([0])
+  const [isValidatable, setIsValidatable] = useState(false)
+  const [visibleItems, setVisibleItems] = useState([0])
   const reference = useRef()
+
+  const dispatch = useDispatch()
 
   const reset = useSelector((state: RootState) => state.configurator.isReset)
 
@@ -129,11 +132,12 @@ export const Step: React.FC<StepProps> = (
 
   const handleClick = (e: React.MouseEvent) => !isEnabled && e.stopPropagation()
 
-  const handleValidation = () => {
-    if (isEnabled) {
+  const handleValidation = (validate?: boolean) => {
+    if (isEnabled && (!isMultiple || validate)) {
       onStepDone?.()
-      setIsValidated(true)
+      dispatch({ type: 'steps/set-validated', payload: title })
     }
+    setIsValidatable(true)
   }
 
   const handleSelectedItems = (items: number[]) => {
@@ -163,7 +167,6 @@ export const Step: React.FC<StepProps> = (
 
   useEffect(() => {
     if (reset) {
-      setIsValidated(false)
       setSelectedItems([])
     }
   }, [reset])
@@ -175,15 +178,15 @@ export const Step: React.FC<StepProps> = (
         <>
           <h2>{title}</h2>
           <StepProperties>
-            {required ? <span>Requis</span> : <span>Optionnel</span>}
-            {multiple && <span>Choix multiples</span>}
+            {isRequired ? <span>Requis</span> : <span>Optionnel</span>}
+            {isMultiple && <span>Choix multiples</span>}
           </StepProperties>
           <ActionsWrapper>
-            {!required && !selectedItems.length && !isValidated &&
+            {!isRequired && !selectedItems.length && !isValidated &&
             <Button text="Passer" icon="skip" textColor="var(--text-color)"
-                    onClick={() => handleValidation()}/>}
-            {multiple && selectedItems.length > 0 && !isValidated &&
-            <Button text="Suivant" icon="arrow" textColor="var(--primary)" onClick={() => handleValidation()}/>
+                    onClick={() => handleValidation(true)}/>}
+            {isMultiple && selectedItems.length > 0 && isValidatable && !isValidated &&
+            <Button text="Suivant" icon="arrow" textColor="var(--primary)" onClick={() => handleValidation(true)}/>
             }
           </ActionsWrapper>
         </>}
@@ -192,12 +195,12 @@ export const Step: React.FC<StepProps> = (
       <ItemsGrid
         items={items}
         category={title}
-        multiple={multiple}
+        multiple={isMultiple}
         onValidation={handleValidation}
         onSelected={handleSelectedItems}
         onVisibleItemsChange={handleVisibleItemsChange}
-        required={required}
-        isValidated={isValidated}/>
+        required={isRequired}
+        />
       }
       {!isLaptop &&
       <>
@@ -205,13 +208,13 @@ export const Step: React.FC<StepProps> = (
           <Dots itemsCount={items.length} selected={selectedItems} active={visibleItems}/>
         </DotsWrapper>
         <ActionsWrapper>
-          {!required && !selectedItems.length && !isValidated &&
+          {!isRequired && !selectedItems.length && !isValidated &&
           <Button text="Passer" icon="skip" textColor="var(--text-color)"
-                  onClick={() => handleValidation()}/>
+                  onClick={() => handleValidation(true)}/>
           }
-          {multiple && selectedItems.length > 0 && !isValidated &&
+          {isMultiple && selectedItems.length > 0 && isValidatable && !isValidated &&
           <Button text="Suivant" icon="arrow" textColor="var(--primary)"
-                  onClick={() => handleValidation()}/>
+                  onClick={() => handleValidation(true)}/>
           }
         </ActionsWrapper>
       </>

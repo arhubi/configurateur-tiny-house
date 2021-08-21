@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { ItemProps } from '../components/atoms/Item'
 import { isValidUrl } from './index'
-import { StepProps } from "../components/molecules/Step";
+import { StepProps } from '../components/molecules/Step'
 
 const propsMapping = {
     name: 'Nom',
@@ -11,8 +11,8 @@ const propsMapping = {
 
 export const mapSettingsResults = (settings: any) => ({
     title: settings?.properties?.section?.title[0].plain_text,
-    required: settings?.properties?.requis?.checkbox,
-    multiple: settings?.properties?.choix_multiples?.checkbox,
+    isRequired: settings?.properties?.requis?.checkbox,
+    isMultiple: settings?.properties?.choix_multiples?.checkbox,
     filterableFields: settings?.properties?.champs_filtrables?.multi_select
 })
 
@@ -56,5 +56,12 @@ export const isStepEnabled = (steps: StepProps[], title: string) => {
     const matchingStep = steps.find(step => step.title === title)
     return matchingStep
       ? matchingStep.isEnabled
+      : false
+}
+
+export const isStepValidated = (steps: StepProps[], title: string) => {
+    const matchingStep = steps.find(step => step.title === title)
+    return matchingStep
+      ? matchingStep.isValidated
       : false
 }

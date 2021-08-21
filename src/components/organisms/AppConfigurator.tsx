@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import styled from 'styled-components'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
-import { getValidItems, isStepActive, isStepEnabled, mapSettingsResults } from '../../utils/notion'
+import { getValidItems, isStepActive, isStepEnabled, isStepValidated, mapSettingsResults } from '../../utils/notion'
 import { device } from '../../theme/device'
 import { RootState } from '../../store'
 import { StepProps } from '../molecules/Step'
@@ -94,6 +94,7 @@ export const AppConfigurator: React.FC = () => {
             notionDbId: id,
             isActive: storeSteps.length ? isStepActive(storeSteps, title) : index === 0,
             isEnabled: storeSteps.length ? isStepEnabled(storeSteps, title) : index === 0,
+            isValidated: storeSteps.length ? isStepValidated(storeSteps, title) : false,
             ...relatedSettings
           }
         })
