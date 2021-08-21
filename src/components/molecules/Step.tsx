@@ -125,10 +125,8 @@ export const Step: React.FC<StepProps> = (
 
   const reset = useSelector((state: RootState) => state.configurator.isReset)
 
-  // TODO : improve by using banner height
   const isLaptop = useMediaQuery('laptop')
-  const isVisible = useVisibility(reference, '#steps', `${isLaptop ? '40px' : '0px'} 0px 0px 0px`)
-
+  const isVisible = useVisibility(reference, '#steps', `0px 0px 0px 0px`)
 
   const handleClick = (e: React.MouseEvent) => !isEnabled && e.stopPropagation()
 
