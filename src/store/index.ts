@@ -1,10 +1,11 @@
 import { Action, combineReducers, createStore, Reducer } from '@reduxjs/toolkit'
-import { ItemProps } from '../components/molecules/Item'
+import { ItemProps, SupplierProps } from '../components/molecules/Item'
 import { StepProps } from '../components/molecules/Step'
 
 type State = {
   items: ItemProps[];
   steps: StepProps[];
+  suppliers: SupplierProps[];
   selectionByScroll: boolean;
   configurator: {
     isLoaded: boolean;
@@ -16,6 +17,7 @@ type State = {
 const initialState: State = {
   items: [],
   steps: [],
+  suppliers: [],
   selectionByScroll: true,
   configurator: {
     isLoaded: false,
@@ -80,6 +82,17 @@ export function stepsReducer(stepsState = initialState.steps, action: StepAction
   }
 }
 
+export function suppliersReducer(suppliersState = initialState.suppliers, action: StepAction) {
+  if (!action.type) return suppliersState
+
+  switch (action.type) {
+    case 'suppliers/set-all':
+      return action.payload
+    default:
+      return suppliersState
+  }
+}
+
 export function scrollSelectionReducer(scrollLockState = initialState.selectionByScroll, action: Action) {
   switch (action.type) {
     case 'scroll-selection/lock':
@@ -109,6 +122,7 @@ export function configuratorStateReducer(configuratorState = initialState.config
 const appReducer = combineReducers({
     items: itemsReducer,
     steps: stepsReducer,
+    suppliers: suppliersReducer,
     selectionByScroll: scrollSelectionReducer,
     configurator: configuratorStateReducer,
   }

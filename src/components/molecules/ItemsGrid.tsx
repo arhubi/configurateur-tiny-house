@@ -73,7 +73,7 @@ export const ItemsGrid: React.FC<ItemsGridProps> = ({ required, validated, ...pr
       if (!required || (required && (!validated || selectedItems.length > 1))) {
         setSelectedItems(selected => selected.filter(_index => _index !== index))
         props?.onSelected?.(selectedItems.filter(_index => _index !== index))
-        dispatch({type: 'items/remove', payload: item})
+        dispatch({ type: 'items/remove', payload: item })
       }
     }
   }

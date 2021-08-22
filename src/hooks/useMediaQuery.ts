@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { size, device } from '../theme/device'
 
-type ScreenSize = keyof typeof size;
+type ScreenSize = keyof typeof size
 
 export function useMediaQuery(screenSize: ScreenSize) {
   const [matches, setMatches] = useState(false)
@@ -18,5 +18,5 @@ export function useMediaQuery(screenSize: ScreenSize) {
     return () => media.removeEventListener('change', listener)
   }, [matches, screenSize])
 
-  return matches;
+  return matches
 }

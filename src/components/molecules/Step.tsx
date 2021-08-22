@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { ItemProps } from './Item'
-import { getDbItems } from '../../utils/notion'
+import { useDbItems } from '../../utils/notion'
 import { useVisibility } from '../../hooks/useVisibility'
 import { device } from '../../theme/device'
 
@@ -116,7 +115,7 @@ export const Step: React.FC<StepProps> = (
     onStepDone,
     onVisibilityChange = () => {},
   }) => {
-  const [items, setItems] = useState<ItemProps[]>([])
+  const items = useDbItems(title, notionDbId)
   const [selectedItems, setSelectedItems] = useState<number[]>([])
   const [isValidatable, setIsValidatable] = useState(false)
   const [visibleItems, setVisibleItems] = useState([0])
@@ -155,14 +154,6 @@ export const Step: React.FC<StepProps> = (
   const handleVisibleItemsChange = (newVisibleItems: number[]) => {
     setVisibleItems(newVisibleItems.length ? [newVisibleItems[newVisibleItems.length - 1]] : [0])
   }
-
-  useEffect(() => {
-    (async () => {
-      const items: ItemProps[] = await getDbItems(title, notionDbId)
-      setItems(items)
-    })()
-    // eslint-disable-next-line
-  }, [])
 
   useEffect(() => {
     if (reset) {

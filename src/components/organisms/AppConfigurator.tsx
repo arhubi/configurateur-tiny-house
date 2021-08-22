@@ -3,7 +3,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import styled from 'styled-components'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
-import { countValidItems, isStepActive, isStepEnabled, isStepValidated, mapSettingsResults } from '../../utils/notion'
+import {
+  countValidItems,
+  isStepActive,
+  isStepEnabled,
+  isStepValidated,
+  mapSettingsResults,
+  mapSuppliersResults
+} from '../../utils/notion'
 import { device } from '../../theme/device'
 import { RootState } from '../../store'
 import { StepProps } from '../molecules/Step'
@@ -64,12 +71,14 @@ const StepsWrapper = styled.div`
 export const AppConfigurator: React.FC = () => {
   const SECTION_ID = 'a8afc4ffdb18418aab047c5628f365c2'
   const SETTINGS_ID = '3c3936ea062842bdada70c592e90b46b'
+  const SUPPLIERS_ID = '978ebebdf9db43219a0a1cd5497fedef'
+
   const dispatch = useDispatch()
 
   const isLaptop = useMediaQuery('laptop')
 
   const isLoaded = useSelector((state: RootState) => state.configurator.isLoaded)
-  const storeSteps: any = useSelector((state: RootState) => state.steps)
+  const storeSteps = useSelector((state: RootState) => state.steps)
 
   useEffect(() => {
     (async () => {
@@ -78,6 +87,9 @@ export const AppConfigurator: React.FC = () => {
 
       const { data: settingsData } = await axios.post(`/databases/${SETTINGS_ID}/query`)
       const settings = settingsData.results.map((result: any) => mapSettingsResults(result))
+
+      const { data: suppliersData } = await axios.post(`/databases/${SUPPLIERS_ID}/query`)
+      const suppliers = suppliersData.results.map((result: any) => mapSuppliersResults(result))
 
       const steps: StepProps[] = await Promise.all(
         stepsIds.map(async (id: string, index: number) => {
@@ -99,8 +111,9 @@ export const AppConfigurator: React.FC = () => {
           }
         })
       )
-      dispatch({type: 'steps/set-all', payload: steps.filter((step: StepProps) => step.itemsCount > 0)})
-      dispatch({type: 'configurator/set-loaded'})
+      dispatch({ type: 'steps/set-all', payload: steps.filter((step: StepProps) => step.itemsCount > 0) })
+      dispatch({ type: 'suppliers/set-all', payload: suppliers })
+      dispatch({ type: 'configurator/set-loaded' })
     })()
     // eslint-disable-next-line
   }, [])
@@ -112,9 +125,9 @@ export const AppConfigurator: React.FC = () => {
         <ConfiguratorMain>
           <StepsWrapper>
             {isLaptop &&
-              <StepsInfo>
-                <h2>Choisissez les composants de votre tiny house</h2>
-              </StepsInfo>
+            <StepsInfo>
+              <h2>Choisissez les composants de votre tiny house</h2>
+            </StepsInfo>
             }
             <Steps steps={storeSteps} isLoading={!isLoaded}/>
           </StepsWrapper>

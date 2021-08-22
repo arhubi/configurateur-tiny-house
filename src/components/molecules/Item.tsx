@@ -40,11 +40,17 @@ const ItemCard = styled.div<Partial<ItemProps>>`
   }
 `;
 
+export type SupplierProps = {
+  id: string;
+  name: string;
+  url?: string;
+}
+
 export type ItemProps = {
   name: string;
   price: number;
   image?: string;
-  supplier: string;
+  supplier?: SupplierProps;
   url: string;
   details?: Detail[];
   category?: string;
@@ -157,6 +163,10 @@ const ItemImage = styled.div<Partial<ItemProps>>`
 const ItemSupplier = styled.div<Partial<ItemProps>>`
   font-size: 0.8rem;
   padding: 0 0.4rem 0.4rem;
+  
+  a:hover {
+    text-decoration: underline;
+  }
 `
 
 export const Item: React.FC<ItemProps> = (
@@ -198,10 +208,10 @@ export const Item: React.FC<ItemProps> = (
         </div>
       </ItemMainInfos>
     </ItemTopBlock>
-    <ItemSupplier isSelected={isSelected}>
+    {supplier && <ItemSupplier isSelected={isSelected}>
       <a onClick={(event) => supplierClick(event as any)}
-         href={"#"}>Fournisseur</a>
-    </ItemSupplier>
+         href={supplier.url && `https://${supplier.url}`} target="_blank">{supplier.name}</a>
+    </ItemSupplier>}
     {details && details.length > 0 &&
       <ItemComplInfos isSelected={isSelected}>
         {details?.map(detail =>

@@ -2,6 +2,9 @@ import axios from 'axios'
 import { ItemProps } from '../components/molecules/Item'
 import { StepProps } from '../components/molecules/Step'
 import { isValidUrl } from './index'
+import { useSelector } from 'react-redux'
+import { RootState } from '../store'
+import {  useEffect, useState } from 'react'
 
 const propsMapping = {
     name: 'Nom',
@@ -18,25 +21,49 @@ export const mapSettingsResults = (settings: any) => ({
     filterableFields: settings?.properties?.champs_filtrables?.multi_select
 })
 
-export const getDbItems = async (categoryName: string, notionDbId: string): Promise<ItemProps[]> => {
-    const { data } = await axios.post(`/databases/${notionDbId}/query`) as any
+export const mapSuppliersResults = (supplier: any) => {
+  return {
+    id: supplier.id,
+    name: supplier?.properties?.Nom?.title[0].plain_text,
+    url: supplier?.properties?.Lien?.url
+}}
 
-    return data.results
-        .map((item: any) => {
-            const properties = item?.properties
-            if (!properties) return {}
-            return {
-                name: properties[propsMapping.name]?.title?.[0]?.plain_text,
-                category: categoryName,
-                price: properties[propsMapping.price]?.number,
-                image: isValidUrl(properties[propsMapping.image]?.files?.[0]?.name) && item?.properties?.Images?.files?.[0]?.name,
-                details: getDetails(item, properties),
-                supplier: properties[propsMapping.supplier]?.relation?.[0]?.id,
-                url: isValidUrl(properties[propsMapping.url]?.url)
-                  ? properties[propsMapping.url]?.url
-                  : ''
-            }
-        }).filter((item: any) => item.price && item.name && item.category)
+export const useDbItems = (categoryName: string, notionDbId: string): ItemProps[] => {
+  const [items, setItems] = useState<ItemProps[]>([])
+  const [rawItems, setRawItems] = useState<any[]>([])
+
+  useEffect(() => {
+      (async () => {
+        const items: any = await axios.post(`/databases/${notionDbId}/query`)
+        setRawItems(items)
+      })()
+    },
+    [notionDbId])
+
+  const suppliers = useSelector((state: RootState) => state.suppliers)
+
+  useEffect(() => {
+    // @ts-ignore
+    const { data } = rawItems
+    if (!data?.results) return
+    setItems(data.results.map((item: any) => {
+        const properties = item?.properties
+        if (!properties) return {}
+        return {
+          name: properties[propsMapping.name]?.title?.[0]?.plain_text,
+          category: categoryName,
+          price: properties[propsMapping.price]?.number,
+          image: isValidUrl(properties[propsMapping.image]?.files?.[0]?.name) && item?.properties?.Images?.files?.[0]?.name,
+          details: getDetails(item, properties),
+          supplier: suppliers.find((supplier: any) => supplier.id === properties[propsMapping.supplier]?.relation?.[0]?.id),
+          url: isValidUrl(properties[propsMapping.url]?.url)
+            ? properties[propsMapping.url]?.url
+            : ''
+        }
+      }).filter((item: any) => item.price && item.name && item.category) || [])
+  }, [rawItems, suppliers])
+
+  return items
 }
 
 export const countValidItems = (items: any[]): number => {
