@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Item, ItemProps } from '../atoms/Item'
+import { Item, ItemProps } from './Item'
 import { useDispatch, useSelector } from 'react-redux'
 import { device } from '../../theme/device'
 import { RootState } from '../../store'

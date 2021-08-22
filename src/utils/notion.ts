@@ -1,12 +1,14 @@
 import axios from 'axios'
-import { ItemProps } from '../components/atoms/Item'
-import { isValidUrl } from './index'
+import { ItemProps } from '../components/molecules/Item'
 import { StepProps } from '../components/molecules/Step'
+import { isValidUrl } from './index'
 
 const propsMapping = {
     name: 'Nom',
     price: 'Prix',
-    image: 'Images'
+    image: 'Images',
+    supplier: 'Fournisseur',
+    url: 'Lien'
 }
 
 export const mapSettingsResults = (settings: any) => ({
@@ -20,21 +22,29 @@ export const getDbItems = async (categoryName: string, notionDbId: string): Prom
     const { data } = await axios.post(`/databases/${notionDbId}/query`) as any
 
     return data.results
-        .map((item: any) => ({
-        name: item?.properties?.[propsMapping.name]?.title?.[0]?.plain_text,
-        category: categoryName,
-        price: item?.properties?.[propsMapping.price]?.number,
-        image: isValidUrl(item?.properties?.[propsMapping.image]?.files?.[0]?.name) && item?.properties?.Images?.files?.[0]?.name,
-        details: getDetails(item, item?.properties)
-    })).filter((item: any) => item.price && item.name && item.category)
+        .map((item: any) => {
+            const properties = item?.properties
+            if (!properties) return {}
+            return {
+                name: properties[propsMapping.name]?.title?.[0]?.plain_text,
+                category: categoryName,
+                price: properties[propsMapping.price]?.number,
+                image: isValidUrl(properties[propsMapping.image]?.files?.[0]?.name) && item?.properties?.Images?.files?.[0]?.name,
+                details: getDetails(item, properties),
+                supplier: properties[propsMapping.supplier]?.relation?.[0]?.id,
+                url: isValidUrl(properties[propsMapping.url]?.url)
+                  ? properties[propsMapping.url]?.url
+                  : ''
+            }
+        }).filter((item: any) => item.price && item.name && item.category)
 }
 
-export const getValidItems = (items: any[]): number => {
-    return items.filter(item => {
+export const countValidItems = (items: any[]): number => {
+    return items.reduce((acc, item) => {
         const name = item?.properties?.[propsMapping.name]?.title?.[0]?.plain_text
         const price = item?.properties?.[propsMapping.price]?.number
-        return name && price
-    }).length
+        return name && price ? ++acc : acc
+    }, 0)
 }
 
 const getDetails = (item: any, properties: any[]) => {

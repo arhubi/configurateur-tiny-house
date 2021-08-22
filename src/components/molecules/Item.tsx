@@ -3,22 +3,12 @@ import styled from 'styled-components'
 import { cssVar, rgba } from 'polished'
 import { device } from '../../theme/device'
 import { useVisibility } from '../../hooks/useVisibility'
-import { Image} from './Image'
+import { Image} from '../atoms/Image'
+import { Button } from '../atoms/Button'
 
 type Detail = {
   name: string;
   value: string;
-}
-
-export type ItemProps = {
-  name: string;
-  price: number;
-  image?: string;
-  details?: Detail[];
-  category?: string;
-  isSelected?: boolean;
-  onClick?: () => void;
-  onVisibilityChange?: (status: boolean) => void;
 }
 
 const ItemCard = styled.div<Partial<ItemProps>>`
@@ -26,16 +16,15 @@ const ItemCard = styled.div<Partial<ItemProps>>`
   flex-direction: column;
   position: relative;
   width: 89.4vw;
-  ${({isSelected}) => isSelected && 'color: white;'}
   max-height: 50vh;
   margin: 0.2rem;
-  border-radius: 0.4rem;
-  background-color: ${({isSelected}) => isSelected 
-    ? () => rgba(cssVar('--primary'), 1) 
-    : 'var(--pure-white)'};
-  box-shadow: ${({isSelected}) => isSelected 
-    ? 'rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.1) 0 0 0 1px'
-    : `rgba(0, 0, 0, 0.05) 0 6px 24px 0, ${rgba(cssVar('--primary'), 0.03)} 0 0 0 1px`};
+  border-radius: 0.6rem;
+  background-color: ${({isSelected}) => isSelected
+          ? () => rgba(cssVar('--primary-light'), 0.05)
+          : 'var(--pure-white)'};
+  border: ${({isSelected}) => isSelected
+    ? '1px solid var(--primary-light);'
+    : '1px solid rgba(0, 0, 0, 0.2)'};
   transition: all 100ms ease-in;
   scroll-snap-align: start;
 
@@ -50,6 +39,19 @@ const ItemCard = styled.div<Partial<ItemProps>>`
     cursor: pointer;
   }
 `;
+
+export type ItemProps = {
+  name: string;
+  price: number;
+  image?: string;
+  supplier: string;
+  url: string;
+  details?: Detail[];
+  category?: string;
+  isSelected?: boolean;
+  onClick?: () => void;
+  onVisibilityChange?: (status: boolean) => void;
+}
 
 const ItemTopBlock = styled.div<Partial<ItemProps>>`
   display: flex;
@@ -70,14 +72,6 @@ const ItemMainInfos = styled.div`
     position: relative;
     height: 100%;
 
-    > div:nth-child(1) {
-      position: absolute;
-      top: 0;
-      left: 0;
-      color: var(--bg-color);
-      font-size: 1.2rem;
-    }
-
     > div:nth-child(2) {
       position: absolute;
       bottom: 0;
@@ -86,23 +80,34 @@ const ItemMainInfos = styled.div`
       font-size: 1.2rem;
     }
     
-    > button {
+    > Button {
       position: absolute;
-      top: 0;
       right: 0;
     }
   }
+`
 
+const MainInfosLeft = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: var(--bg-color);
+  font-size: 1.2rem;
+  text-align: left;
+
+  > div:nth-child(2) {
+    font-size: 0.8rem;
+  }
 `
 
 const ItemComplInfos = styled.div<Partial<ItemProps>>`
   display: grid;
   scroll-snap-type: y mandatory;
   overflow: scroll;
-  transition: background-color 100ms ease-in;
+  transition: color 100ms ease-in;
   margin-bottom: 0.4rem;
   border-radius: 0 0 0.4rem 0.4rem;
-  padding: 0.4rem;
+  padding: 0 0.4rem 0.4rem;
   grid-auto-rows: minmax(min-content, max-content);
 
   > div {
@@ -120,7 +125,7 @@ const ItemComplInfos = styled.div<Partial<ItemProps>>`
     :hover {
       transition: background 200ms ease-in;
       background: ${({isSelected}) => () => 
-              rgba(cssVar(isSelected ? '--pure-white' : '--primary'), isSelected ? 0.6 : 0.3)};
+              rgba(cssVar(isSelected ? '--pure-white' : '--primary-light'), isSelected ? 1 : 0.2)};
     }
   }
 `
@@ -132,9 +137,10 @@ const ItemImage = styled.div<Partial<ItemProps>>`
   border-radius: 0.4rem;
   height: 12rem;
   width: 100%;
+  box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.05) 0 0 0 1px;
   background: ${({isSelected}) => () => isSelected 
-          ? rgba(cssVar('--pure-white'), 0.2)
-          : rgba(cssVar('--primary'), 0.4)};
+          ? rgba(cssVar('--primary-light'), 0.4)
+          : rgba(cssVar('--primary-light'), 0.2)};
 
   img {
     object-fit: cover;
@@ -148,6 +154,11 @@ const ItemImage = styled.div<Partial<ItemProps>>`
   }
 `
 
+const ItemSupplier = styled.div<Partial<ItemProps>>`
+  font-size: 0.8rem;
+  padding: 0 0.4rem 0.4rem;
+`
+
 export const Item: React.FC<ItemProps> = (
   {
     name,
@@ -155,10 +166,17 @@ export const Item: React.FC<ItemProps> = (
     image,
     details,
     isSelected = false,
-    onVisibilityChange
+    onVisibilityChange,
+    url,
+    supplier
   }) => {
   const reference = useRef()
   const isVisible = useVisibility(reference, null, '0px')
+
+  const supplierClick = (e: MouseEvent) => {
+    e.stopPropagation()
+    // window.open('')
+  }
 
   useEffect(() => {
     onVisibilityChange?.(isVisible)
@@ -172,11 +190,18 @@ export const Item: React.FC<ItemProps> = (
       </ItemImage>
       <ItemMainInfos>
         <div>
-          <div>{name}</div>
+          <MainInfosLeft>
+            <div>{name}</div>
+          </MainInfosLeft>
           <div>{price} €</div>
+          {url && <Button icon="link" size="small" onClick={() => window.open(url, "_blank")} />}
         </div>
       </ItemMainInfos>
     </ItemTopBlock>
+    <ItemSupplier isSelected={isSelected}>
+      <a onClick={(event) => supplierClick(event as any)}
+         href={"#"}>Fournisseur</a>
+    </ItemSupplier>
     {details && details.length > 0 &&
       <ItemComplInfos isSelected={isSelected}>
         {details?.map(detail =>

@@ -30,7 +30,7 @@ const ConfiguratorBannerWrapper = styled.div<ArrowProps>`
   height: var(--configurator-banner-height-mobile);
   width: 80vw;
   margin-top: 0.2rem;
-  box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.03) 0 0 0 1px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.2) 0 0 0 1px;
 
   h2 {
     margin: 0;

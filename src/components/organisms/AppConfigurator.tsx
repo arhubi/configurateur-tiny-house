@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import styled from 'styled-components'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
-import { getValidItems, isStepActive, isStepEnabled, isStepValidated, mapSettingsResults } from '../../utils/notion'
+import { countValidItems, isStepActive, isStepEnabled, isStepValidated, mapSettingsResults } from '../../utils/notion'
 import { device } from '../../theme/device'
 import { RootState } from '../../store'
 import { StepProps } from '../molecules/Step'
@@ -73,7 +73,7 @@ export const AppConfigurator: React.FC = () => {
 
   useEffect(() => {
     (async () => {
-      const {data} = await axios.get(`/blocks/${SECTION_ID}/children`)
+      const { data } = await axios.get(`/blocks/${SECTION_ID}/children`)
       const stepsIds = data.results?.map((item: any) => item.id)
 
       const { data: settingsData } = await axios.post(`/databases/${SETTINGS_ID}/query`)
@@ -86,7 +86,7 @@ export const AppConfigurator: React.FC = () => {
           const relatedSettings = settings.find((setting: any) => setting.title === title)
 
           const { data: postsData } = await axios.post(`/databases/${id}/query`)
-          const itemsCount = getValidItems(postsData.results)
+          const itemsCount = countValidItems(postsData.results)
 
           return {
             title,

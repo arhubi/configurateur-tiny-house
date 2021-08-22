@@ -9,7 +9,8 @@
   --body-height-mobile: calc(100vh - var(--header-height-mobile));
   --text-color: #333333;
   --primary: #BC3908;
-  --bg-color: #FFFCFC;
+  --primary-light: #F76D3B;
+  --bg-color: #FFFAFA;
   --pure-white: #FFFFFF;
 }
 

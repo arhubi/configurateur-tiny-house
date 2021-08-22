@@ -7,7 +7,7 @@ import { Button } from '../atoms/Button'
 import { device } from '../../theme/device'
 import { SummaryItem } from '../molecules/SummaryItem'
 import { groupBy } from '../../utils'
-import { ItemProps } from '../atoms/Item'
+import { ItemProps } from '../molecules/Item'
 import { Icon } from '../atoms/Icon'
 
 const SummaryWrapper = styled.div<{isSummaryOpen: boolean}>`

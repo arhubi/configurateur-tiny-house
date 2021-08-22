@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { ItemProps } from '../atoms/Item'
+import { ItemProps } from './Item'
 import { Image } from '../atoms/Image'
 
 const SummaryItemWrapper = styled.div`

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { ItemProps } from '../atoms/Item'
+import { ItemProps } from './Item'
 import { getDbItems } from '../../utils/notion'
 import { useVisibility } from '../../hooks/useVisibility'
 import { device } from '../../theme/device'
@@ -63,6 +63,7 @@ const StepProperties = styled.div`
     margin: 0.2rem 0.4rem 0.2rem 0;
     padding: 0.2rem 0.4rem;
     border-radius: 0.2rem;
+    border: 1px solid rgba(0, 0, 0, 0.05);
   }
 `
 

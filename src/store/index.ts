@@ -1,5 +1,5 @@
 import { Action, combineReducers, createStore, Reducer } from '@reduxjs/toolkit'
-import { ItemProps } from '../components/atoms/Item'
+import { ItemProps } from '../components/molecules/Item'
 import { StepProps } from '../components/molecules/Step'
 
 type State = {
@@ -115,7 +115,6 @@ const appReducer = combineReducers({
 )
 
 const rootReducer: Reducer = (state: RootState, action: Action) => {
-  console.log(action.type)
   if (action.type === 'configurator/reset') {
     const { steps, configurator } = state
     state = {
