@@ -61,7 +61,7 @@ export const useDbItems = (categoryName: string, notionDbId: string): ItemProps[
             : ''
         }
       }).filter((item: any) => item.price && item.name && item.category) || [])
-  }, [rawItems, suppliers])
+  }, [categoryName, rawItems, suppliers])
 
   return items
 }

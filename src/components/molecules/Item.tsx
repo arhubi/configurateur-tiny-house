@@ -210,7 +210,7 @@ export const Item: React.FC<ItemProps> = (
     </ItemTopBlock>
     {supplier && <ItemSupplier isSelected={isSelected}>
       <a onClick={(event) => supplierClick(event as any)}
-         href={supplier.url && `https://${supplier.url}`} target="_blank">{supplier.name}</a>
+         href={supplier.url && `https://${supplier.url}`} target="_blank" rel="noreferrer">{supplier.name}</a>
     </ItemSupplier>}
     {details && details.length > 0 &&
       <ItemComplInfos isSelected={isSelected}>
